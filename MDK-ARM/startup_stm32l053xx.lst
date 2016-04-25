@@ -387,7 +387,7 @@ ARM Macro Assembler    Page 6
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0+ --apcs=inter
 work --depend=sicmic\startup_stm32l053xx.d -osicmic\startup_stm32l053xx.o -IC:\
-Users\Micke\Documents\GitHub\SiCMiC\MDK-ARM\RTE -I"C:\Program Files (x86)\Keil\
+Users\Micke\Documents\GitHub\MiCSiC\MDK-ARM\RTE -I"C:\Program Files (x86)\Keil\
 
 
 

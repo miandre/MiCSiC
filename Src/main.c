@@ -94,6 +94,7 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
+		while(1){
 		for(int i = 0; i<3; i++){
 		HAL_Delay(50);
 		HAL_GPIO_TogglePin(LD_R_GPIO_Port,LD_R_Pin);
@@ -104,6 +105,9 @@ int main(void)
 		HAL_Delay(50);
 		HAL_GPIO_TogglePin(LD_G_GPIO_Port,LD_G_Pin);
 		}
+	}
+		
+		
 		
 		HAL_Delay(3000);
 		SystemPower_Config();
