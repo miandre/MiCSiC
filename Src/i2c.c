@@ -125,14 +125,6 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c)
 
 /* USER CODE BEGIN 1 */
 
-/* USER CODE END 1 */
 
-/**
-  * @}
-  */
 
-/**
-  * @}
-  */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
