@@ -37,3 +37,4 @@ sicmic\main.o: ../Inc/dac.h
 sicmic\main.o: ../Inc/i2c.h
 sicmic\main.o: ../Inc/iwdg.h
 sicmic\main.o: ../Inc/gpio.h
+sicmic\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

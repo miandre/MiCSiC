@@ -37,7 +37,8 @@ struct experiment_package {
 void SystemClock_Config(void);
 void read_sic(struct experiment_package*);
 void read_s(struct experiment_package*);
-uint8_t* create_i2c_package(struct experiment_package*);
+void send_message(uint8_t *);
+uint8_t* create_i2c_package(struct experiment_package*, uint8_t[]);
 static void SystemPower_Config(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 
@@ -57,9 +58,6 @@ int main(void)
   MX_I2C1_Init();
   MX_IWDG_Init();
 
-
-
-		
 		for(int i = 0; i<3; i++){
 		HAL_Delay(50);
 		HAL_GPIO_TogglePin(LD_R_GPIO_Port,LD_R_Pin);
@@ -76,14 +74,43 @@ int main(void)
 		read_sic(&package);
 		read_s(&package);
 		
-		uint8_t* message = create_i2c_package(&package);
+		
+		//Create the message to be sent via I2C.
+		uint8_t message[18] = {0};
+		uint8_t* message_pointer = create_i2c_package(&package, message);
+		
+		//Send message
+		send_message(message_pointer);
 		
 		//Set all pins to analog and turn of gpio clocks
 		SystemPower_Config();
 		//Enter stop mode
 		HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
-
+	
 }
+
+void read_sic(struct experiment_package* pointer){
+		pointer->temperature_sic = 0x2FF;
+		pointer->ube_sic = 0x4FF;
+		pointer->vrb_sic = 0x6FF;
+		pointer->vrc_sic = 0x8FF;
+}
+
+void read_s(struct experiment_package* pointer){
+	
+	pointer->temperature_s = 0x1FF;
+	pointer->ube_s = 0x3FF;
+	pointer->vrb_s = 0x4FF;
+	pointer->vrc_s = 0x8FF;
+	
+}
+
+void send_message(uint8_t * message){
+	
+	//TODO Send data.
+	
+}
+
 
 /** System Clock Configuration
 */
@@ -129,7 +156,6 @@ void SystemClock_Config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
-/* USER CODE BEGIN 4 */
 
 static void SystemPower_Config(void)
 {
@@ -190,7 +216,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 *
 *
 */
-uint8_t* create_i2c_package(struct experiment_package* pointer){
+uint8_t* create_i2c_package(struct experiment_package* pointer, uint8_t message[]){
 	
 	uint16_t raw_data[8] = {
 		//First experiment
@@ -205,10 +231,19 @@ uint8_t* create_i2c_package(struct experiment_package* pointer){
 		pointer->vrc_sic
 	};
 	
-	uint8_t * message = (uint8_t * ) malloc(17);
 	
-	message = (uint8_t*) raw_data; 
+	uint8_t* ptr = (uint8_t*) &raw_data; 
 	
-	return message;
+	uint8_t checksum = 0;
+	
+	message[0] = 16*8 + 8;
+	for(int i = 1; i < 17; i++){
+		message[i] = *ptr;
+		checksum += *ptr;
+		ptr++;
+	}
+	message[17] = checksum;
+	
+	return (uint8_t *) message;
 }
 

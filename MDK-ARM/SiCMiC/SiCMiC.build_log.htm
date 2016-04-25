@@ -27,25 +27,15 @@ Project File Date:  04/25/2016
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'SiCMiC'
-compiling i2c.c...
-../Src/i2c.c(136): error:  #40: expected an identifier
-  	char[] message = 
-../Src/i2c.c(136): error:  #65: expected a ";"
-  	char[] message = 
-../Src/i2c.c(138): warning:  #940-D: missing return statement at end of non-void function "createPackage"
-  }
-../Src/i2c.c: 1 warning, 2 errors
 compiling main.c...
-../Src/main.c(96): error:  #20: identifier "experiment_package" is undefined
-  		experiment_package package;
-../Src/main.c(96): error:  #65: expected a ";"
-  		experiment_package package;
-../Src/main.c(98): warning:  #223-D: function "read_sic" declared implicitly
-  		read_sic();
-../Src/main.c(99): warning:  #223-D: function "read_s" declared implicitly
-  		read_s();
-../Src/main.c: 2 warnings, 2 errors
-"SiCMiC\SiCMiC.axf" - 4 Error(s), 3 Warning(s).
+../Src/main.c(7): warning:  #9-D: nested comment is not allowed
+  /* Includes ------------------------------------------------------------------*/
+../Src/main.c(147): warning:  #177-D: function "SystemPower_Config" was declared but never referenced
+  static void SystemPower_Config(void)
+../Src/main.c: 2 warnings, 0 errors
+linking...
+Program Size: Code=9520 RO-data=268 RW-data=8 ZI-data=1216  
+"SiCMiC\SiCMiC.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -63,8 +53,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:4.3.0
-Target not created.
-Build Time Elapsed:  00:00:04
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>
