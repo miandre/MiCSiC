@@ -4,7 +4,7 @@
   * Description        : Main program body
   ******************************************************************************
 	
-/* Includes ------------------------------------------------------------------*/
+ Includes ------------------------------------------------------------------*/
 #include "stm32l0xx_hal.h"
 #include "adc.h"
 #include "dac.h"
@@ -33,11 +33,16 @@ struct experiment_package {
 	uint16_t ube_s;
 	
 };
+
+/* I2C handler declaration */
+I2C_HandleTypeDef I2CxHandle;
+
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void read_sic(struct experiment_package*);
 void read_s(struct experiment_package*);
 void send_message(uint8_t *);
+
 uint8_t* create_i2c_package(struct experiment_package*, uint8_t[]);
 static void SystemPower_Config(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
