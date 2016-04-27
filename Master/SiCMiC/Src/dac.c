@@ -42,11 +42,11 @@
 /* USER CODE END 0 */
 
 DAC_HandleTypeDef hdac;
-
+DAC_ChannelConfTypeDef sConfigDac;
 /* DAC init function */
 void MX_DAC_Init(void)
 {
-  DAC_ChannelConfTypeDef sConfig;
+  
 
     /**DAC Initialization 
     */
@@ -55,9 +55,9 @@ void MX_DAC_Init(void)
 
     /**DAC channel OUT1 config 
     */
-  sConfig.DAC_Trigger = DAC_TRIGGER_NONE;
-  sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
-  HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_1);
+  sConfigDac.DAC_Trigger = DAC_TRIGGER_NONE;
+  sConfigDac.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
+  HAL_DAC_ConfigChannel(&hdac, &sConfigDac, DAC_CHANNEL_1);
 
 }
 

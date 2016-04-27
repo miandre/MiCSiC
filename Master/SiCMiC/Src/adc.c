@@ -44,11 +44,11 @@
 
 ADC_HandleTypeDef hadc;
 DMA_HandleTypeDef hdma_adc;
+ADC_ChannelConfTypeDef sConfigAdc;
 
 /* ADC init function */
 void MX_ADC_Init(void)
 {
-  ADC_ChannelConfTypeDef sConfig;
 
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
@@ -62,65 +62,13 @@ void MX_ADC_Init(void)
   hadc.Init.ContinuousConvMode = DISABLE;
   hadc.Init.DiscontinuousConvMode = DISABLE;
   hadc.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc.Init.DMAContinuousRequests = DISABLE;
+  hadc.Init.DMAContinuousRequests = ENABLE;
   hadc.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc.Init.Overrun = ADC_OVR_DATA_PRESERVED;
   hadc.Init.LowPowerAutoWait = ENABLE;
   hadc.Init.LowPowerFrequencyMode = ENABLE;
   hadc.Init.LowPowerAutoPowerOff = ENABLE;
   HAL_ADC_Init(&hadc);
-
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
-  sConfig.Channel = ADC_CHANNEL_0;
-  sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
-  HAL_ADC_ConfigChannel(&hadc, &sConfig);
-
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
-  sConfig.Channel = ADC_CHANNEL_1;
-  HAL_ADC_ConfigChannel(&hadc, &sConfig);
-
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
-  sConfig.Channel = ADC_CHANNEL_2;
-  HAL_ADC_ConfigChannel(&hadc, &sConfig);
-
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
-  sConfig.Channel = ADC_CHANNEL_3;
-  HAL_ADC_ConfigChannel(&hadc, &sConfig);
-
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
-  sConfig.Channel = ADC_CHANNEL_5;
-  HAL_ADC_ConfigChannel(&hadc, &sConfig);
-
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
-  sConfig.Channel = ADC_CHANNEL_6;
-  HAL_ADC_ConfigChannel(&hadc, &sConfig);
-
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
-  sConfig.Channel = ADC_CHANNEL_7;
-  HAL_ADC_ConfigChannel(&hadc, &sConfig);
-
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
-  sConfig.Channel = ADC_CHANNEL_8;
-  HAL_ADC_ConfigChannel(&hadc, &sConfig);
-
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
-  sConfig.Channel = ADC_CHANNEL_9;
-  HAL_ADC_ConfigChannel(&hadc, &sConfig);
-
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
-  sConfig.Channel = ADC_CHANNEL_VREFINT;
-  HAL_ADC_ConfigChannel(&hadc, &sConfig);
-
 }
 
 void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
@@ -162,19 +110,24 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     hdma_adc.Instance = DMA1_Channel1;
     hdma_adc.Init.Request = DMA_REQUEST_0;
     hdma_adc.Init.Direction = DMA_PERIPH_TO_MEMORY;
-    hdma_adc.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_adc.Init.PeriphInc = DMA_PINC_DISABLE;		//WHATS THIS ABOUT THEN?!
     hdma_adc.Init.MemInc = DMA_MINC_ENABLE;
-    hdma_adc.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
-    hdma_adc.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
-    hdma_adc.Init.Mode = DMA_NORMAL;
-    hdma_adc.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_adc.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+    hdma_adc.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+    hdma_adc.Init.Mode = DMA_CIRCULAR;
+    hdma_adc.Init.Priority = DMA_PRIORITY_HIGH;
     HAL_DMA_Init(&hdma_adc);
 
-    __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc);
-
-  /* USER CODE BEGIN ADC1_MspInit 1 */
-
-  /* USER CODE END ADC1_MspInit 1 */
+ /* Deinitialize  & Initialize the DMA for new transfer */
+  HAL_DMA_DeInit(&hdma_adc);  
+  HAL_DMA_Init(&hdma_adc);
+  
+  /* Associate the DMA handle */
+  __HAL_LINKDMA(hadc, DMA_Handle, hdma_adc);
+  
+  /* NVIC configuration for DMA Input data interrupt */
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
   }
 }
 

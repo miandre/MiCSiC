@@ -1,35 +1,4 @@
-/**
-  ******************************************************************************
-  * File Name          : main.c
-  * Description        : Main program body
-  ******************************************************************************
-  *
-  * COPYRIGHT(c) 2016 STMicroelectronics
-  *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  *
-  ******************************************************************************
-  */
+
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l0xx_hal.h"
 #include "adc.h"
@@ -39,38 +8,73 @@
 #include "iwdg.h"
 #include "gpio.h"
 
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
+/* Structs -------------------------------------------------------------------*/
+struct experiment_package {
+	/*
+	temperature
+	Vrb (voltage over resistor on base)
+	Vrc (voltage over resistor on collector)
+	Ube (voltage frop from base to emitter)
+	*/
+	uint16_t temperature;
+	uint16_t vrb;
+	uint16_t vrc;
+	uint16_t ube;
+	
+};
 
 /* Private variables ---------------------------------------------------------*/
+/* ADC channel configuration structure declaration */
+extern ADC_ChannelConfTypeDef        sConfigAdc;
+extern DAC_ChannelConfTypeDef 			 sConfigDac;
 
-/* USER CODE BEGIN PV */
-/* Private variables ---------------------------------------------------------*/
+uint32_t                      			 aResultDMA;
 
-/* USER CODE END PV */
+extern ADC_HandleTypeDef             hadc;
+extern DAC_HandleTypeDef    				 hdac;
+extern DMA_HandleTypeDef 						 hdma_adc;
+uint8_t 														 number_of_tests = 16;
+static struct experiment_package  					 experiments[2];
 
+uint32_t 														timerDelay = 10;
+	
+/* Defines -------------------------------------------------------------------*/
+#define SiC_TEMPERATURE							 ADC_CHANNEL_0
+#define SiC_VRB											 ADC_CHANNEL_1
+#define SiC_VRC											 ADC_CHANNEL_2
+#define SiC_UBE											 ADC_CHANNEL_3
+#define S_TEMPERATURE 							 ADC_CHANNEL_5
+#define S_VRB 											 ADC_CHANNEL_6
+#define S_VRC 											 ADC_CHANNEL_7
+#define S_UBE 											 ADC_CHANNEL_8
+/*
+    PA0     ------> ADC_IN0
+    PA1     ------> ADC_IN1
+    PA2     ------> ADC_IN2
+    PA3     ------> ADC_IN3
+    PA5     ------> ADC_IN5
+    PA6     ------> ADC_IN6
+    PA7     ------> ADC_IN7
+    PB0     ------> ADC_IN8
+    PB1     ------> ADC_IN9 
+		*/
+
+//#define TEST /* Uncomment this before launce! */
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void ADC_ReadChannel(uint32_t);
+void DAC_SetVoltage(uint32_t);
+void ReadSiC(void);
+void ReadSilicon(void);
+void TestDACRolling(void);
+uint8_t* create_i2c_package(uint8_t[]);
+void send_message(uint8_t *);
 
-/* USER CODE BEGIN PFP */
-/* Private function prototypes -----------------------------------------------*/
-
-/* USER CODE END PFP */
-
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 int main(void)
 {
-
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration----------------------------------------------------------*/
-
+	
+	
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
@@ -84,22 +88,176 @@ int main(void)
   MX_DAC_Init();
   MX_I2C1_Init();
   MX_IWDG_Init();
-
-  /* USER CODE BEGIN 2 */
-
-  /* USER CODE END 2 */
-
+		if(HAL_ADCEx_Calibration_Start(&hadc, ADC_SINGLE_ENDED) != HAL_OK){
+		while(1) {}
+	}
+	#ifdef TEST /* Enable test to do the tests */
+	TestDACRolling();
+	ADC_ReadChannel(ADC_CHANNEL_0);
+	#else
+	
+	TestDACRolling();
+	ReadSiC();
+	ReadSilicon();
+	
+	/* Create I2C message */
+	uint8_t message[18] = {0};
+	uint8_t* message_pointer = create_i2c_package(message);
+	
+	/* Send message */
+	send_message(message_pointer);
+	
+	#endif
   /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   while (1)
   {
-  /* USER CODE END WHILE */
-
-  /* USER CODE BEGIN 3 */
 
   }
-  /* USER CODE END 3 */
+}
 
+void TestDACRolling(){
+		
+	HAL_DAC_SetValue(&hdac, DAC1_CHANNEL_1, DAC_ALIGN_12B_R, 0);
+	HAL_DAC_Start(&hdac, DAC1_CHANNEL_1);
+	HAL_Delay(1000);
+	
+	int vals[] = {
+		0x100,0x280,0x400,0x580,0x700,0x880,0xA00,0xB80,0xD00,0xE80,0xFFF
+	};
+	
+	for(int i = 0; i < 9; i++){
+		HAL_DAC_SetValue(&hdac, DAC1_CHANNEL_1, DAC_ALIGN_12B_R, vals[i]);
+		HAL_DAC_Start(&hdac, DAC1_CHANNEL_1);
+		HAL_Delay(25);
+	}
+}
+
+void send_message(uint8_t * message){
+	
+	//TODO Send data.
+	
+}
+
+uint8_t* create_i2c_package(uint8_t message[]){
+	
+	uint16_t raw_data[8] = {
+		//First experiment
+		experiments[0].temperature,
+		experiments[0].ube,
+		experiments[0].vrb,
+		experiments[0].vrc,
+		//Second experiment
+		experiments[1].temperature,
+		experiments[1].ube,
+		experiments[1].vrb,
+		experiments[1].vrc
+	};
+	
+	
+	uint8_t* ptr = (uint8_t*) &raw_data; 
+	
+	uint8_t checksum = 0;
+	
+	message[0] = 16*8 + 8;
+	for(int i = 1; i < 17; i++){
+		message[i] = *ptr;
+		checksum += *ptr;
+		ptr++;
+	}
+	message[17] = checksum;
+	
+	return (uint8_t *) message;
+}
+
+void ReadSilicon(){
+	/*Read Temperature and store in struct*/	
+	ADC_ReadChannel(S_TEMPERATURE);
+	HAL_Delay(timerDelay);
+	experiments[1].temperature = (aResultDMA & 0xFFF);
+	
+	/*Read 16 samples of ADC, shift result 5 bits and store in struct */
+	/*Read vrb*/
+  uint32_t average = 0;
+	for(int i = 0; i < number_of_tests; i++){
+		ADC_ReadChannel(S_VRB);
+		HAL_Delay(timerDelay);
+		average += aResultDMA;
+	}
+	experiments[1].vrb = ((average >> 4) & 0xFFF);
+	
+	/*read vrc*/
+  average = 0;
+	for(int i = 0; i < number_of_tests; i++){
+		ADC_ReadChannel(S_VRC);
+		HAL_Delay(timerDelay);
+		average += aResultDMA;
+	}
+	experiments[1].vrc = ((average >> 4) & 0xFFF);
+	
+	/*read ube*/
+  average = 0;
+	for(int i = 0; i < number_of_tests; i++){
+		ADC_ReadChannel(S_UBE);
+		HAL_Delay(timerDelay);
+		average += aResultDMA;
+	}
+	experiments[1].ube = ((average >> 4) & 0xFFF);
+	
+}
+
+void ReadSiC(){
+	/*Read Temperature and store in struct*/	
+	ADC_ReadChannel(SiC_TEMPERATURE);
+	HAL_Delay(timerDelay);
+	experiments[0].temperature = (aResultDMA & 0xFFF);
+	
+	/*Read 16 samples of ADC, shift result 5 bits and store in struct */
+	/*Read vrb*/
+  uint32_t average = 0;
+	for(int i = 0; i < number_of_tests; i++){
+		ADC_ReadChannel(SiC_VRB);
+		HAL_Delay(timerDelay);
+		average += aResultDMA;
+	}
+	experiments[0].vrb = ((average >> 4) & 0xFFF);
+	
+	/*read vrc*/
+  average = 0;
+	for(int i = 0; i < number_of_tests; i++){
+		ADC_ReadChannel(SiC_VRC);
+		HAL_Delay(timerDelay);
+		average += aResultDMA;
+	}
+	experiments[0].vrc = ((average >> 4) & 0xFFF);
+	
+	/*read ube*/
+  average = 0;
+	for(int i = 0; i < number_of_tests; i++){
+		ADC_ReadChannel(SiC_UBE);
+		HAL_Delay(timerDelay);
+		average += aResultDMA;
+	}
+	experiments[0].ube = ((average >> 4) & 0xFFF);
+	
+}
+
+void ADC_ReadChannel(uint32_t channel){
+	
+	HAL_DMA_DeInit(&hdma_adc);  
+  HAL_DMA_Init(&hdma_adc);
+
+	aResultDMA = 0;
+	sConfigAdc.Channel = channel;
+  
+	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
+		while(1){}
+	}
+		
+		
+	if(HAL_ADC_Start_DMA(&hadc, &aResultDMA, 1) != HAL_OK){
+		while(1) {}
+	}
+	
 }
 
 /** System Clock Configuration
