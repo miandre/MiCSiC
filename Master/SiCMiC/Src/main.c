@@ -36,11 +36,11 @@ extern DMA_HandleTypeDef 						 hdma_adc;
 uint8_t 														 number_of_tests = 16;
 static struct experiment_package  					 experiments[2];
 
-uint32_t 														timerDelay = 10;
+uint32_t 														timerDelay = 1;
 	
 /* Defines -------------------------------------------------------------------*/
 #define SiC_TEMPERATURE							 ADC_CHANNEL_0
-#define SiC_VRB											 ADC_CHANNEL_1
+#define SiC_VRB											 ADC_CHANNEL_9
 #define SiC_VRC											 ADC_CHANNEL_2
 #define SiC_UBE											 ADC_CHANNEL_3
 #define S_TEMPERATURE 							 ADC_CHANNEL_5
@@ -98,6 +98,7 @@ int main(void)
 	#else
 	
 	HAL_Delay(100);
+	
 	ReadSiC();
 	ReadSilicon();
 	
@@ -173,7 +174,6 @@ uint8_t* create_i2c_package(uint8_t message[]){
 void ReadSilicon(){
 	/*Read Temperature and store in struct*/	
 	ADC_ReadChannel(S_TEMPERATURE);
-	HAL_Delay(timerDelay);
 	experiments[1].temperature = (aResultDMA & 0xFFF);
 	
 	/*Read 16 samples of ADC, shift result 5 bits and store in struct */
@@ -181,7 +181,6 @@ void ReadSilicon(){
   uint32_t average = 0;
 	for(int i = 0; i < number_of_tests; i++){
 		ADC_ReadChannel(S_VRB);
-		HAL_Delay(timerDelay);
 		average += aResultDMA;
 	}
 	experiments[1].vrb = ((average >> 4) & 0xFFF);
@@ -190,16 +189,15 @@ void ReadSilicon(){
   average = 0;
 	for(int i = 0; i < number_of_tests; i++){
 		ADC_ReadChannel(S_VRC);
-		HAL_Delay(timerDelay);
-		experiments[1].vrc = ((average >> 4) & 0xFFF);
 		average += aResultDMA;
 	}
+	
+	experiments[1].vrc = ((average >> 4) & 0xFFF);
 	
 	/*read ube*/
   average = 0;
 	for(int i = 0; i < number_of_tests; i++){
 		ADC_ReadChannel(S_UBE);
-		HAL_Delay(timerDelay);
 		average += aResultDMA;
 	}
 	experiments[1].ube = ((average >> 4) & 0xFFF);
@@ -209,7 +207,6 @@ void ReadSilicon(){
 void ReadSiC(){
 	/*Read Temperature and store in struct*/	
 	ADC_ReadChannel(SiC_TEMPERATURE);
-	HAL_Delay(timerDelay);
 	experiments[0].temperature = (aResultDMA & 0xFFF);
 	
 	/*Read 16 samples of ADC, shift result 5 bits and store in struct */
@@ -217,7 +214,6 @@ void ReadSiC(){
   uint32_t average = 0;
 	for(int i = 0; i < number_of_tests; i++){
 		ADC_ReadChannel(SiC_VRB);
-		HAL_Delay(timerDelay);
 		average += aResultDMA;
 	}
 	experiments[0].vrb = ((average >> 4) & 0xFFF);
@@ -226,7 +222,6 @@ void ReadSiC(){
   average = 0;
 	for(int i = 0; i < number_of_tests; i++){
 		ADC_ReadChannel(SiC_VRC);
-		HAL_Delay(timerDelay);
 		average += aResultDMA;
 	}
 	experiments[0].vrc = ((average >> 4) & 0xFFF);
@@ -235,7 +230,6 @@ void ReadSiC(){
   average = 0;
 	for(int i = 0; i < number_of_tests; i++){
 		ADC_ReadChannel(SiC_UBE);
-		HAL_Delay(timerDelay);
 		average += aResultDMA;
 	}
 	experiments[0].ube = ((average >> 4) & 0xFFF);
@@ -247,6 +241,8 @@ void ADC_ReadChannel(uint32_t channel){
 	HAL_DMA_DeInit(&hdma_adc);  
   HAL_DMA_Init(&hdma_adc);
 
+	
+	
 	aResultDMA = 0;
 	sConfigAdc.Channel = channel;
   
@@ -259,6 +255,8 @@ void ADC_ReadChannel(uint32_t channel){
 		while(1) {}
 	}
 		
+	HAL_Delay(timerDelay);
+	
 	uint32_t *chselr = (uint32_t *)0x40012428;
 	
 	*chselr = 0x0;
