@@ -88,7 +88,8 @@ int main(void)
   MX_DAC_Init();
   MX_I2C1_Init();
   MX_IWDG_Init();
-		if(HAL_ADCEx_Calibration_Start(&hadc, ADC_SINGLE_ENDED) != HAL_OK){
+	
+	if(HAL_ADCEx_Calibration_Start(&hadc, ADC_SINGLE_ENDED) != HAL_OK){
 		while(1) {}
 	}
 	#ifdef TEST /* Enable test to do the tests */
@@ -96,7 +97,7 @@ int main(void)
 	ADC_ReadChannel(ADC_CHANNEL_0);
 	#else
 	
-	TestDACRolling();
+	HAL_Delay(100);
 	ReadSiC();
 	ReadSilicon();
 	
@@ -190,9 +191,9 @@ void ReadSilicon(){
 	for(int i = 0; i < number_of_tests; i++){
 		ADC_ReadChannel(S_VRC);
 		HAL_Delay(timerDelay);
+		experiments[1].vrc = ((average >> 4) & 0xFFF);
 		average += aResultDMA;
 	}
-	experiments[1].vrc = ((average >> 4) & 0xFFF);
 	
 	/*read ube*/
   average = 0;
@@ -257,6 +258,10 @@ void ADC_ReadChannel(uint32_t channel){
 	if(HAL_ADC_Start_DMA(&hadc, &aResultDMA, 1) != HAL_OK){
 		while(1) {}
 	}
+		
+	uint32_t *chselr = (uint32_t *)0x40012428;
+	
+	*chselr = 0x0;
 	
 }
 
