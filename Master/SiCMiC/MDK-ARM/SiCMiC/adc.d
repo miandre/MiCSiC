@@ -34,4 +34,3 @@ sicmic\adc.o: ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_iwdg.h
 sicmic\adc.o: ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_pwr.h
 sicmic\adc.o: ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_pwr_ex.h
 sicmic\adc.o: ../Inc/gpio.h
-sicmic\adc.o: ../Inc/dma.h

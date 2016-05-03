@@ -361,7 +361,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32L053xx</Define>
               <Undefine />
-              <IncludePath>../Inc; ../Drivers/STM32L0xx_HAL_Driver/Inc; ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy; ../Drivers/CMSIS/Include; ../Drivers/CMSIS/Device/ST/STM32L0xx/Include</IncludePath>
+              <IncludePath>../Inc;  ../Drivers/STM32L0xx_HAL_Driver/Inc;  ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy;  ../Drivers/CMSIS/Include;  ../Drivers/CMSIS/Device/ST/STM32L0xx/Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -437,11 +437,6 @@
               <FileName>stm32l0xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/stm32l0xx_hal_msp.c</FilePath>
-              
-            </File><File>
-              <FileName>dma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Src/dma.c</FilePath>
               
             </File><File>
               <FileName>iwdg.c</FileName>

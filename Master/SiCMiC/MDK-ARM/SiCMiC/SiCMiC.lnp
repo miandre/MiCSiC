@@ -5,7 +5,6 @@
 "sicmic\main.o"
 "sicmic\adc.o"
 "sicmic\stm32l0xx_hal_msp.o"
-"sicmic\dma.o"
 "sicmic\iwdg.o"
 "sicmic\stm32l0xx_it.o"
 "sicmic\stm32l0xx_hal_adc.o"

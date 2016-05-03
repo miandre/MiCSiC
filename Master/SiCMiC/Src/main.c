@@ -1,12 +1,24 @@
 
+/*
+TODO: 
+
+Timea ADC.
+
+DONE:
+
+ADC lirar utan delay. Löst genom att kolla EOC.
+
+
+*/
+
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l0xx_hal.h"
 #include "adc.h"
 #include "dac.h"
-#include "dma.h"
 #include "i2c.h"
 #include "iwdg.h"
 #include "gpio.h"
+
 
 /* Structs -------------------------------------------------------------------*/
 struct experiment_package {
@@ -32,7 +44,7 @@ uint32_t                      			 aResultDMA;
 
 extern ADC_HandleTypeDef             hadc;
 extern DAC_HandleTypeDef    				 hdac;
-extern DMA_HandleTypeDef 						 hdma_adc;
+
 uint8_t 														 number_of_tests = 16;
 static struct experiment_package  					 experiments[2];
 
@@ -59,7 +71,7 @@ uint32_t 														timerDelay = 1;
     PB1     ------> ADC_IN9 
 		*/
 
-//#define TEST /* Uncomment this before launce! */
+//#define TEST /* Uncomment this before launch! */
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void ADC_ReadChannel(uint32_t);
@@ -83,7 +95,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_ADC_Init();
   MX_DAC_Init();
   MX_I2C1_Init();
@@ -102,9 +113,12 @@ int main(void)
 	ReadSiC();
 	ReadSilicon();
 	
+	
 	/* Create I2C message */
 	uint8_t message[18] = {0};
 	uint8_t* message_pointer = create_i2c_package(message);
+	
+	
 	
 	/* Send message */
 	send_message(message_pointer);
@@ -238,11 +252,6 @@ void ReadSiC(){
 
 void ADC_ReadChannel(uint32_t channel){
 	
-	HAL_DMA_DeInit(&hdma_adc);  
-  HAL_DMA_Init(&hdma_adc);
-
-	
-	
 	aResultDMA = 0;
 	sConfigAdc.Channel = channel;
   
@@ -251,15 +260,28 @@ void ADC_ReadChannel(uint32_t channel){
 	}
 		
 		
-	if(HAL_ADC_Start_DMA(&hadc, &aResultDMA, 1) != HAL_OK){
+	if(HAL_ADC_Start(&hadc) != HAL_OK){ //Vad händer här inne nu?
 		while(1) {}
 	}
-		
-	HAL_Delay(timerDelay);
 	
-	uint32_t *chselr = (uint32_t *)0x40012428;
+	//Kan vi titta på någon bit? 
+/*	
+	if(HAL_ADC_PollForConversion(&hadc, 10) != HAL_OK){
+		while(1) {} //Error handling?
+	}
+	*/
+	//
 	
-	*chselr = 0x0;
+	//Det här funkar eftersom att vi nu kollar på EOC (End of Conversion) innan vi gör läsningen.
+	while(!(hadc.Instance->ISR & 0x4)){}
+	
+	//HAL_Delay(timerDelay);	//Korrekt nu med delay.
+	aResultDMA = hadc.Instance->DR; //När vi läser från registret clearas EOC igen. 
+	//0x40012440
+	//aResultDMA = *((volatile uint32_t *) 0x40012440);
+	
+
+	*((volatile uint32_t*)0x40012428)=0; //Här nollar vi channel select-registret. 
 	
 }
 
