@@ -2,7 +2,13 @@
 /*
 TODO: 
 
+Fortsätt timea ADC. I dagsläget ligger vi på 0,8 ms (med 230cyclesBlaBla). 0,2 med 1cycle5
+Vi fastnar i EOC när vi mäter väldigt många gånger, lista ut varför. 
+
+
 Timea ADC.
+
+Fixa USART-kommunikation till Processing
 
 DONE:
 
@@ -45,7 +51,7 @@ uint32_t                      			 aResultDMA;
 extern ADC_HandleTypeDef             hadc;
 extern DAC_HandleTypeDef    				 hdac;
 
-uint8_t 														 number_of_tests = 16;
+uint16_t 														 number_of_tests = 16;
 static struct experiment_package  					 experiments[2];
 
 uint32_t 														timerDelay = 1;
@@ -72,6 +78,7 @@ uint32_t 														timerDelay = 1;
 		*/
 
 //#define TEST /* Uncomment this before launch! */
+#define TEST_TIME 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void ADC_ReadChannel(uint32_t);
@@ -79,14 +86,22 @@ void DAC_SetVoltage(uint32_t);
 void ReadSiC(void);
 void ReadSilicon(void);
 void TestDACRolling(void);
+void ADC_ReadChannelAverage(uint32_t, uint16_t);
 uint8_t* create_i2c_package(uint8_t[]);
 void send_message(uint8_t *);
+
+uint32_t tickCounterStart;
+uint32_t tickCounterStop;
+uint32_t value;
+uint32_t timeTaken;
 
 
 int main(void)
 {
-	
-	
+	tickCounterStart =0;
+	tickCounterStop = 0;
+	value=0;
+	timeTaken=0;
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
@@ -103,16 +118,42 @@ int main(void)
 	if(HAL_ADCEx_Calibration_Start(&hadc, ADC_SINGLE_ENDED) != HAL_OK){
 		while(1) {}
 	}
-	#ifdef TEST /* Enable test to do the tests */
-	TestDACRolling();
-	ADC_ReadChannel(ADC_CHANNEL_0);
-	#else
+	//#ifdef TEST /* Enable test to do the tests */
+	//TestDACRolling();
+	//ADC_ReadChannel(ADC_CHANNEL_0);
+	
+	#ifdef TEST_TIME
+	
+	
 	
 	HAL_Delay(100);
 	
+	
+	
+	tickCounterStart = HAL_GetTick();
+	/*
+	for(int i = 0; i < 4096; i++){ //Test 2^11 times
+		ADC_ReadChannel(S_VRC);
+		value += aResultDMA;
+	}
+	*/
+	ADC_ReadChannelAverage(S_VRC, 2048);
+	tickCounterStop = HAL_GetTick();
+	
+	timeTaken = (tickCounterStop  -  tickCounterStart);
+	value = (value >> 14);
+	while(1){
+
+	}
+	
+	#else
+	HAL_Delay(100);
+	
+	tickCounterStart = HAL_GetTick();
 	ReadSiC();
 	ReadSilicon();
-	
+	tickCounterStop = HAL_GetTick();
+	timeTaken = (tickCounterStop  -  tickCounterStart);
 	
 	/* Create I2C message */
 	uint8_t message[18] = {0};
@@ -193,28 +234,26 @@ void ReadSilicon(){
 	/*Read 16 samples of ADC, shift result 5 bits and store in struct */
 	/*Read vrb*/
   uint32_t average = 0;
+	ADC_ReadChannelAverage(S_VRB,number_of_tests);
+	
+	/* OLD STUFF 
 	for(int i = 0; i < number_of_tests; i++){
 		ADC_ReadChannel(S_VRB);
 		average += aResultDMA;
 	}
-	experiments[1].vrb = ((average >> 4) & 0xFFF);
+	*/
+	experiments[1].vrb = ((aResultDMA >> 4) & 0xFFF);
 	
 	/*read vrc*/
   average = 0;
-	for(int i = 0; i < number_of_tests; i++){
-		ADC_ReadChannel(S_VRC);
-		average += aResultDMA;
-	}
+	ADC_ReadChannelAverage(S_VRC , number_of_tests);
 	
-	experiments[1].vrc = ((average >> 4) & 0xFFF);
+	experiments[1].vrc = ((aResultDMA >> 4) & 0xFFF);
 	
 	/*read ube*/
   average = 0;
-	for(int i = 0; i < number_of_tests; i++){
-		ADC_ReadChannel(S_UBE);
-		average += aResultDMA;
-	}
-	experiments[1].ube = ((average >> 4) & 0xFFF);
+	ADC_ReadChannelAverage(S_UBE,number_of_tests);
+	experiments[1].ube = ((aResultDMA >> 4) & 0xFFF);
 	
 }
 
@@ -226,29 +265,23 @@ void ReadSiC(){
 	/*Read 16 samples of ADC, shift result 5 bits and store in struct */
 	/*Read vrb*/
   uint32_t average = 0;
-	for(int i = 0; i < number_of_tests; i++){
-		ADC_ReadChannel(SiC_VRB);
-		average += aResultDMA;
-	}
-	experiments[0].vrb = ((average >> 4) & 0xFFF);
+
+	ADC_ReadChannelAverage(SiC_VRB,number_of_tests);
+	
+	experiments[0].vrb = ((aResultDMA >> 4) & 0xFFF);
 	
 	/*read vrc*/
   average = 0;
-	for(int i = 0; i < number_of_tests; i++){
-		ADC_ReadChannel(SiC_VRC);
-		average += aResultDMA;
-	}
-	experiments[0].vrc = ((average >> 4) & 0xFFF);
+	ADC_ReadChannelAverage(SiC_VRC,number_of_tests);
+	experiments[0].vrc = ((aResultDMA >> 4) & 0xFFF);
 	
 	/*read ube*/
   average = 0;
-	for(int i = 0; i < number_of_tests; i++){
-		ADC_ReadChannel(SiC_UBE);
-		average += aResultDMA;
-	}
-	experiments[0].ube = ((average >> 4) & 0xFFF);
+	ADC_ReadChannelAverage(SiC_UBE,number_of_tests);
+	experiments[0].ube = ((aResultDMA >> 4) & 0xFFF);
 	
 }
+
 
 void ADC_ReadChannel(uint32_t channel){
 	
@@ -284,6 +317,43 @@ void ADC_ReadChannel(uint32_t channel){
 	*((volatile uint32_t*)0x40012428)=0; //Här nollar vi channel select-registret. 
 	
 }
+void ADC_ReadChannelAverage(uint32_t channel, uint16_t sampleSize){
+	
+	aResultDMA = 0;
+	sConfigAdc.Channel = channel;
+  
+	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
+		while(1){}
+	}
+		
+	for (int i = 0; i < sampleSize; i++){
+		
+	if(HAL_ADC_Start(&hadc) != HAL_OK){ //Vad händer här inne nu?
+		while(1) {}
+	}
+	
+	//Kan vi titta på någon bit? 
+/*	
+	if(HAL_ADC_PollForConversion(&hadc, 10) != HAL_OK){
+		while(1) {} //Error handling?
+	}
+	*/
+	//
+	
+	//Det här funkar eftersom att vi nu kollar på EOC (End of Conversion) innan vi gör läsningen.
+	while(!(hadc.Instance->ISR & 0x4)){}
+	
+	//HAL_Delay(timerDelay);	//Korrekt nu med delay.
+	aResultDMA += hadc.Instance->DR; //När vi läser från registret clearas EOC igen. 
+	//0x40012440
+	//aResultDMA = *((volatile uint32_t *) 0x40012440);
+	
+	}
+	
+	*((volatile uint32_t*)0x40012428)=0; //Här nollar vi channel select-registret. 
+	
+}
+
 
 /** System Clock Configuration
 */
