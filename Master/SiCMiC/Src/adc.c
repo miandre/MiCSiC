@@ -68,6 +68,40 @@ void MX_ADC_Init(void)
   hadc.Init.LowPowerAutoPowerOff = ENABLE;
   HAL_ADC_Init(&hadc);
 
+	sConfigAdc.Channel = ADC_CHANNEL_0;
+	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
+		while(1){}
+	}
+		sConfigAdc.Channel = ADC_CHANNEL_2;
+	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
+		while(1){}
+	}
+		sConfigAdc.Channel = ADC_CHANNEL_3;
+	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
+		while(1){}
+	}
+		sConfigAdc.Channel = ADC_CHANNEL_5;
+	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
+		while(1){}
+	}
+		sConfigAdc.Channel = ADC_CHANNEL_6;
+	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
+		while(1){}
+	}
+		sConfigAdc.Channel = ADC_CHANNEL_7;
+	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
+		while(1){}
+	}
+	
+		sConfigAdc.Channel = ADC_CHANNEL_8;
+	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
+		while(1){}
+	}
+	
+		sConfigAdc.Channel = ADC_CHANNEL_9;
+	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
+		while(1){}
+	}
 
 }
 
@@ -106,7 +140,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /* USER CODE BEGIN ADC1_MspInit 1 */
-
+	
   /* USER CODE END ADC1_MspInit 1 */
   }
 }
