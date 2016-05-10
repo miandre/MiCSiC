@@ -32,4 +32,6 @@ sicmic\stm32l0xx_it.o: ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_i2c_ex.
 sicmic\stm32l0xx_it.o: ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_iwdg.h
 sicmic\stm32l0xx_it.o: ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_pwr.h
 sicmic\stm32l0xx_it.o: ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_pwr_ex.h
+sicmic\stm32l0xx_it.o: ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h
+sicmic\stm32l0xx_it.o: ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart_ex.h
 sicmic\stm32l0xx_it.o: ../Inc/stm32l0xx_it.h

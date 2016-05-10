@@ -2,7 +2,7 @@
 /*
 TODO: 
 
-Fixa en error handling på att vi fastnar i check på 
+Fixa en error handling på att vi fastnar i check på eoc
 
 Fortsätt timea ADC. I dagsläget ligger vi på 0,8 ms (med 230cyclesBlaBla). 0,2 med 1cycle5
 Vi fastnar i EOC när vi mäter väldigt många gånger, lista ut varför. 
@@ -26,6 +26,7 @@ ADC lirar utan delay. Löst genom att kolla EOC.
 #include "i2c.h"
 #include "iwdg.h"
 #include "gpio.h"
+#include "usart.h"
 
 
 /* Structs -------------------------------------------------------------------*/
@@ -52,6 +53,7 @@ uint32_t                      			 aResultDMA;
 
 extern ADC_HandleTypeDef             hadc;
 extern DAC_HandleTypeDef    				 hdac;
+extern UART_HandleTypeDef 						huart1;
 
 uint16_t 														 number_of_tests = 16;
 
@@ -114,6 +116,9 @@ int main(void)
   MX_DAC_Init();
   MX_I2C1_Init();
   MX_IWDG_Init();
+	MX_USART1_UART_Init();
+	
+
 	
 	if(HAL_ADCEx_Calibration_Start(&hadc, ADC_SINGLE_ENDED) != HAL_OK){
 		while(1) {}
@@ -165,13 +170,29 @@ int main(void)
 	uint8_t message[18] = {0};
 	uint8_t* message_pointer = create_i2c_package(message);
 	
+	//UART TEST MESSAGE
+	uint8_t hej[3] = {'h','e','j'};
 	
 	
 	/* Send message */
 	send_message(message_pointer);
 	
-  /* Infinite loop */
+	//Send UART Message
+	HAL_UART_Transmit(&huart1,(uint8_t*)&hej, 3, 10);
+	huart1.State=HAL_UART_STATE_READY;
 	
+  /* Infinite loop */
+		while(1){
+	HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_15);
+		HAL_Delay(100);
+			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_3);
+		HAL_Delay(100);
+			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
+		HAL_Delay(100);
+			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_5);
+		HAL_Delay(100);
+		
+	}
 
   }
 }
