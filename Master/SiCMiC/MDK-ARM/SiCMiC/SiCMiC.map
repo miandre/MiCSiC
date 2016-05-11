@@ -968,28 +968,28 @@ Image Symbol Table
     i.MX_I2C1_Init                           0x080018c0   Section        0  i2c.o(i.MX_I2C1_Init)
     i.MX_IWDG_Init                           0x080018fc   Section        0  iwdg.o(i.MX_IWDG_Init)
     i.MX_USART1_UART_Init                    0x08001920   Section        0  usart.o(i.MX_USART1_UART_Init)
-    i.NVIC_SetPriority                       0x08001954   Section        0  stm32l0xx_hal_cortex.o(i.NVIC_SetPriority)
-    NVIC_SetPriority                         0x08001955   Thumb Code    60  stm32l0xx_hal_cortex.o(i.NVIC_SetPriority)
-    i.SysTick_Handler                        0x08001998   Section        0  stm32l0xx_it.o(i.SysTick_Handler)
-    i.SystemClock_Config                     0x080019a4   Section        0  main.o(i.SystemClock_Config)
-    i.SystemInit                             0x08001a34   Section        0  system_stm32l0xx.o(i.SystemInit)
-    i.UART_AdvFeatureConfig                  0x08001a88   Section        0  stm32l0xx_hal_uart.o(i.UART_AdvFeatureConfig)
-    i.UART_CheckIdleState                    0x08001b54   Section        0  stm32l0xx_hal_uart.o(i.UART_CheckIdleState)
-    i.UART_SetConfig                         0x08001ba8   Section        0  stm32l0xx_hal_uart.o(i.UART_SetConfig)
-    i.UART_WaitOnFlagUntilTimeout            0x08001dbc   Section        0  stm32l0xx_hal_uart.o(i.UART_WaitOnFlagUntilTimeout)
-    i.__ARM_clz                              0x08001e6a   Section        0  depilogue.o(i.__ARM_clz)
-    i.__ARM_common_switch8                   0x08001e98   Section        0  stm32l0xx_hal_uart.o(i.__ARM_common_switch8)
-    i.__scatterload_copy                     0x08001eb2   Section       14  handlers.o(i.__scatterload_copy)
-    i.__scatterload_null                     0x08001ec0   Section        2  handlers.o(i.__scatterload_null)
-    i.__scatterload_zeroinit                 0x08001ec2   Section       14  handlers.o(i.__scatterload_zeroinit)
-    i.create_i2c_package                     0x08001ed0   Section        0  main.o(i.create_i2c_package)
-    i.main                                   0x08001f1c   Section        0  main.o(i.main)
-    i.readRollingADC                         0x08002068   Section        0  main.o(i.readRollingADC)
-    i.setDAC                                 0x080020fc   Section        0  main.o(i.setDAC)
-    i.shiftAverages                          0x08002118   Section        0  main.o(i.shiftAverages)
-    .constdata                               0x08002144   Section       16  stm32l0xx_hal_rcc.o(.constdata)
-    APBAHBPrescTable                         0x08002144   Data          16  stm32l0xx_hal_rcc.o(.constdata)
-    .constdata                               0x08002154   Section       25  system_stm32l0xx.o(.constdata)
+    i.NVIC_SetPriority                       0x08001950   Section        0  stm32l0xx_hal_cortex.o(i.NVIC_SetPriority)
+    NVIC_SetPriority                         0x08001951   Thumb Code    60  stm32l0xx_hal_cortex.o(i.NVIC_SetPriority)
+    i.SysTick_Handler                        0x08001994   Section        0  stm32l0xx_it.o(i.SysTick_Handler)
+    i.SystemClock_Config                     0x080019a0   Section        0  main.o(i.SystemClock_Config)
+    i.SystemInit                             0x08001a30   Section        0  system_stm32l0xx.o(i.SystemInit)
+    i.UART_AdvFeatureConfig                  0x08001a84   Section        0  stm32l0xx_hal_uart.o(i.UART_AdvFeatureConfig)
+    i.UART_CheckIdleState                    0x08001b50   Section        0  stm32l0xx_hal_uart.o(i.UART_CheckIdleState)
+    i.UART_SetConfig                         0x08001ba4   Section        0  stm32l0xx_hal_uart.o(i.UART_SetConfig)
+    i.UART_WaitOnFlagUntilTimeout            0x08001db8   Section        0  stm32l0xx_hal_uart.o(i.UART_WaitOnFlagUntilTimeout)
+    i.__ARM_clz                              0x08001e66   Section        0  depilogue.o(i.__ARM_clz)
+    i.__ARM_common_switch8                   0x08001e94   Section        0  stm32l0xx_hal_uart.o(i.__ARM_common_switch8)
+    i.__scatterload_copy                     0x08001eae   Section       14  handlers.o(i.__scatterload_copy)
+    i.__scatterload_null                     0x08001ebc   Section        2  handlers.o(i.__scatterload_null)
+    i.__scatterload_zeroinit                 0x08001ebe   Section       14  handlers.o(i.__scatterload_zeroinit)
+    i.create_i2c_package                     0x08001ecc   Section        0  main.o(i.create_i2c_package)
+    i.main                                   0x08001f10   Section        0  main.o(i.main)
+    i.readRollingADC                         0x08002050   Section        0  main.o(i.readRollingADC)
+    i.setDAC                                 0x080020e4   Section        0  main.o(i.setDAC)
+    i.shiftAverages                          0x08002100   Section        0  main.o(i.shiftAverages)
+    .constdata                               0x0800212c   Section       16  stm32l0xx_hal_rcc.o(.constdata)
+    APBAHBPrescTable                         0x0800212c   Data          16  stm32l0xx_hal_rcc.o(.constdata)
+    .constdata                               0x0800213c   Section       25  system_stm32l0xx.o(.constdata)
     .data                                    0x20000000   Section        8  dac.o(.data)
     .data                                    0x20000008   Section       16  main.o(.data)
     .data                                    0x20000018   Section        8  adc.o(.data)
@@ -1127,28 +1127,28 @@ Image Symbol Table
     MX_GPIO_Init                             0x080017d9   Thumb Code   208  gpio.o(i.MX_GPIO_Init)
     MX_I2C1_Init                             0x080018c1   Thumb Code    46  i2c.o(i.MX_I2C1_Init)
     MX_IWDG_Init                             0x080018fd   Thumb Code    24  iwdg.o(i.MX_IWDG_Init)
-    MX_USART1_UART_Init                      0x08001921   Thumb Code    44  usart.o(i.MX_USART1_UART_Init)
-    SysTick_Handler                          0x08001999   Thumb Code    12  stm32l0xx_it.o(i.SysTick_Handler)
-    SystemClock_Config                       0x080019a5   Thumb Code   136  main.o(i.SystemClock_Config)
-    SystemInit                               0x08001a35   Thumb Code    66  system_stm32l0xx.o(i.SystemInit)
-    UART_AdvFeatureConfig                    0x08001a89   Thumb Code   202  stm32l0xx_hal_uart.o(i.UART_AdvFeatureConfig)
-    UART_CheckIdleState                      0x08001b55   Thumb Code    80  stm32l0xx_hal_uart.o(i.UART_CheckIdleState)
-    UART_SetConfig                           0x08001ba9   Thumb Code   484  stm32l0xx_hal_uart.o(i.UART_SetConfig)
-    UART_WaitOnFlagUntilTimeout              0x08001dbd   Thumb Code   174  stm32l0xx_hal_uart.o(i.UART_WaitOnFlagUntilTimeout)
-    __ARM_clz                                0x08001e6b   Thumb Code    46  depilogue.o(i.__ARM_clz)
-    __ARM_common_switch8                     0x08001e99   Thumb Code    26  stm32l0xx_hal_uart.o(i.__ARM_common_switch8)
-    __scatterload_copy                       0x08001eb3   Thumb Code    14  handlers.o(i.__scatterload_copy)
-    __scatterload_null                       0x08001ec1   Thumb Code     2  handlers.o(i.__scatterload_null)
-    __scatterload_zeroinit                   0x08001ec3   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
-    create_i2c_package                       0x08001ed1   Thumb Code    70  main.o(i.create_i2c_package)
-    main                                     0x08001f1d   Thumb Code   298  main.o(i.main)
-    readRollingADC                           0x08002069   Thumb Code   140  main.o(i.readRollingADC)
-    setDAC                                   0x080020fd   Thumb Code    24  main.o(i.setDAC)
-    shiftAverages                            0x08002119   Thumb Code    40  main.o(i.shiftAverages)
-    AHBPrescTable                            0x08002154   Data          16  system_stm32l0xx.o(.constdata)
-    PLLMulTable                              0x08002164   Data           9  system_stm32l0xx.o(.constdata)
-    Region$$Table$$Base                      0x08002170   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08002190   Number         0  anon$$obj.o(Region$$Table)
+    MX_USART1_UART_Init                      0x08001921   Thumb Code    40  usart.o(i.MX_USART1_UART_Init)
+    SysTick_Handler                          0x08001995   Thumb Code    12  stm32l0xx_it.o(i.SysTick_Handler)
+    SystemClock_Config                       0x080019a1   Thumb Code   136  main.o(i.SystemClock_Config)
+    SystemInit                               0x08001a31   Thumb Code    66  system_stm32l0xx.o(i.SystemInit)
+    UART_AdvFeatureConfig                    0x08001a85   Thumb Code   202  stm32l0xx_hal_uart.o(i.UART_AdvFeatureConfig)
+    UART_CheckIdleState                      0x08001b51   Thumb Code    80  stm32l0xx_hal_uart.o(i.UART_CheckIdleState)
+    UART_SetConfig                           0x08001ba5   Thumb Code   484  stm32l0xx_hal_uart.o(i.UART_SetConfig)
+    UART_WaitOnFlagUntilTimeout              0x08001db9   Thumb Code   174  stm32l0xx_hal_uart.o(i.UART_WaitOnFlagUntilTimeout)
+    __ARM_clz                                0x08001e67   Thumb Code    46  depilogue.o(i.__ARM_clz)
+    __ARM_common_switch8                     0x08001e95   Thumb Code    26  stm32l0xx_hal_uart.o(i.__ARM_common_switch8)
+    __scatterload_copy                       0x08001eaf   Thumb Code    14  handlers.o(i.__scatterload_copy)
+    __scatterload_null                       0x08001ebd   Thumb Code     2  handlers.o(i.__scatterload_null)
+    __scatterload_zeroinit                   0x08001ebf   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
+    create_i2c_package                       0x08001ecd   Thumb Code    64  main.o(i.create_i2c_package)
+    main                                     0x08001f11   Thumb Code   292  main.o(i.main)
+    readRollingADC                           0x08002051   Thumb Code   140  main.o(i.readRollingADC)
+    setDAC                                   0x080020e5   Thumb Code    24  main.o(i.setDAC)
+    shiftAverages                            0x08002101   Thumb Code    40  main.o(i.shiftAverages)
+    AHBPrescTable                            0x0800213c   Data          16  system_stm32l0xx.o(.constdata)
+    PLLMulTable                              0x0800214c   Data           9  system_stm32l0xx.o(.constdata)
+    Region$$Table$$Base                      0x08002158   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08002178   Number         0  anon$$obj.o(Region$$Table)
     sConfigDac                               0x20000000   Data           8  dac.o(.data)
     tickCounterStart                         0x20000008   Data           4  main.o(.data)
     tickCounterStop                          0x2000000c   Data           4  main.o(.data)
@@ -1171,9 +1171,9 @@ Memory Map of the image
 
   Image Entry point : 0x080000c1
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x000021b8, Max: 0x00010000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x000021a0, Max: 0x00010000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Base: 0x08000000, Size: 0x00002190, Max: 0x00010000, ABSOLUTE)
+    Execution Region ER_IROM1 (Base: 0x08000000, Size: 0x00002178, Max: 0x00010000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -1252,30 +1252,30 @@ Memory Map of the image
     0x080017d8   0x000000e8   Code   RO            3    i.MX_GPIO_Init      gpio.o
     0x080018c0   0x0000003c   Code   RO          136    i.MX_I2C1_Init      i2c.o
     0x080018fc   0x00000024   Code   RO          352    i.MX_IWDG_Init      iwdg.o
-    0x08001920   0x00000034   Code   RO          403    i.MX_USART1_UART_Init  usart.o
-    0x08001954   0x00000044   Code   RO          907    i.NVIC_SetPriority  stm32l0xx_hal_cortex.o
-    0x08001998   0x0000000c   Code   RO          378    i.SysTick_Handler   stm32l0xx_it.o
-    0x080019a4   0x00000090   Code   RO          211    i.SystemClock_Config  main.o
-    0x08001a34   0x00000054   Code   RO         2678    i.SystemInit        system_stm32l0xx.o
-    0x08001a88   0x000000ca   Code   RO         2376    i.UART_AdvFeatureConfig  stm32l0xx_hal_uart.o
-    0x08001b52   0x00000002   PAD
-    0x08001b54   0x00000054   Code   RO         2377    i.UART_CheckIdleState  stm32l0xx_hal_uart.o
-    0x08001ba8   0x00000214   Code   RO         2384    i.UART_SetConfig    stm32l0xx_hal_uart.o
-    0x08001dbc   0x000000ae   Code   RO         2386    i.UART_WaitOnFlagUntilTimeout  stm32l0xx_hal_uart.o
-    0x08001e6a   0x0000002e   Code   RO         2749    i.__ARM_clz         mf_p.l(depilogue.o)
-    0x08001e98   0x0000001a   Code   RO         2594    i.__ARM_common_switch8  stm32l0xx_hal_uart.o
-    0x08001eb2   0x0000000e   Code   RO         2757    i.__scatterload_copy  mc_p.l(handlers.o)
-    0x08001ec0   0x00000002   Code   RO         2758    i.__scatterload_null  mc_p.l(handlers.o)
-    0x08001ec2   0x0000000e   Code   RO         2759    i.__scatterload_zeroinit  mc_p.l(handlers.o)
-    0x08001ed0   0x0000004c   Code   RO          212    i.create_i2c_package  main.o
-    0x08001f1c   0x0000014c   Code   RO          213    i.main              main.o
-    0x08002068   0x00000094   Code   RO          214    i.readRollingADC    main.o
-    0x080020fc   0x0000001c   Code   RO          216    i.setDAC            main.o
-    0x08002118   0x0000002c   Code   RO          217    i.shiftAverages     main.o
-    0x08002144   0x00000010   Data   RO         1575    .constdata          stm32l0xx_hal_rcc.o
-    0x08002154   0x00000019   Data   RO         2679    .constdata          system_stm32l0xx.o
-    0x0800216d   0x00000003   PAD
-    0x08002170   0x00000020   Data   RO         2755    Region$$Table       anon$$obj.o
+    0x08001920   0x00000030   Code   RO          403    i.MX_USART1_UART_Init  usart.o
+    0x08001950   0x00000044   Code   RO          907    i.NVIC_SetPriority  stm32l0xx_hal_cortex.o
+    0x08001994   0x0000000c   Code   RO          378    i.SysTick_Handler   stm32l0xx_it.o
+    0x080019a0   0x00000090   Code   RO          211    i.SystemClock_Config  main.o
+    0x08001a30   0x00000054   Code   RO         2678    i.SystemInit        system_stm32l0xx.o
+    0x08001a84   0x000000ca   Code   RO         2376    i.UART_AdvFeatureConfig  stm32l0xx_hal_uart.o
+    0x08001b4e   0x00000002   PAD
+    0x08001b50   0x00000054   Code   RO         2377    i.UART_CheckIdleState  stm32l0xx_hal_uart.o
+    0x08001ba4   0x00000214   Code   RO         2384    i.UART_SetConfig    stm32l0xx_hal_uart.o
+    0x08001db8   0x000000ae   Code   RO         2386    i.UART_WaitOnFlagUntilTimeout  stm32l0xx_hal_uart.o
+    0x08001e66   0x0000002e   Code   RO         2749    i.__ARM_clz         mf_p.l(depilogue.o)
+    0x08001e94   0x0000001a   Code   RO         2594    i.__ARM_common_switch8  stm32l0xx_hal_uart.o
+    0x08001eae   0x0000000e   Code   RO         2757    i.__scatterload_copy  mc_p.l(handlers.o)
+    0x08001ebc   0x00000002   Code   RO         2758    i.__scatterload_null  mc_p.l(handlers.o)
+    0x08001ebe   0x0000000e   Code   RO         2759    i.__scatterload_zeroinit  mc_p.l(handlers.o)
+    0x08001ecc   0x00000044   Code   RO          212    i.create_i2c_package  main.o
+    0x08001f10   0x00000140   Code   RO          213    i.main              main.o
+    0x08002050   0x00000094   Code   RO          214    i.readRollingADC    main.o
+    0x080020e4   0x0000001c   Code   RO          216    i.setDAC            main.o
+    0x08002100   0x0000002c   Code   RO          217    i.shiftAverages     main.o
+    0x0800212c   0x00000010   Data   RO         1575    .constdata          stm32l0xx_hal_rcc.o
+    0x0800213c   0x00000019   Data   RO         2679    .constdata          system_stm32l0xx.o
+    0x08002155   0x00000003   PAD
+    0x08002158   0x00000020   Data   RO         2755    Region$$Table       anon$$obj.o
 
 
     Execution Region RW_IRAM1 (Base: 0x20000000, Size: 0x00000598, Max: 0x00002000, ABSOLUTE)
@@ -1308,7 +1308,7 @@ Image component sizes
        232         24          0          0          0     233175   gpio.o
        128         28          0          0         60       1469   i2c.o
         36         12          0          0         20        643   iwdg.o
-       772         64          0         16         64       5211   main.o
+       752         56          0         16         64       5151   main.o
         28          8        192          0       1024        596   startup_stm32l053xx.o
        116         18          0          4          0       3574   stm32l0xx_hal.o
        864         40          0          0          0       4403   stm32l0xx_hal_adc.o
@@ -1326,10 +1326,10 @@ Image component sizes
       1308         76          0          0          0       6173   stm32l0xx_hal_uart.o
         12          0          0          0          0        446   stm32l0xx_it.o
         84         18         25          4          0       1381   system_stm32l0xx.o
-       120         16          0          0        112       1518   usart.o
+       116         16          0          0        112       1514   usart.o
 
     ----------------------------------------------------------------------
-      7484        568        268         40       1392     294263   Object Totals
+      7460        560        268         40       1392     294199   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         16          0          3          0          0          0   (incl. Padding)
 
@@ -1379,15 +1379,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      8324        604        268         40       1392     292263   Grand Totals
-      8324        604        268         40       1392     292263   ELF Image Totals
-      8324        604        268         40          0          0   ROM Totals
+      8300        596        268         40       1392     292199   Grand Totals
+      8300        596        268         40       1392     292199   ELF Image Totals
+      8300        596        268         40          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 8592 (   8.39kB)
+    Total RO  Size (Code + RO Data)                 8568 (   8.37kB)
     Total RW  Size (RW Data + ZI Data)              1432 (   1.40kB)
-    Total ROM Size (Code + RO Data + RW Data)       8632 (   8.43kB)
+    Total ROM Size (Code + RO Data + RW Data)       8608 (   8.41kB)
 
 ==============================================================================
 

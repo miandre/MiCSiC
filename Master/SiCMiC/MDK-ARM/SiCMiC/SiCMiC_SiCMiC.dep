@@ -109,7 +109,7 @@ I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_pwr_ex.h)(0x5710C495)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h)(0x5710C495)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart_ex.h)(0x5710C495)
 I (../Inc/gpio.h)(0x57220F4C)
-F (../Src/main.c)(0x5731EC8B)(-c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include --C99-I C:\Users\Hannes\Documents\GitHub\MiCSiC\Master\SiCMiC\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\1.5.0\Device\Include-D__UVISION_VERSION="518" -D_RTE_ -DSTM32L053xx -DUSE_HAL_DRIVER -DSTM32L053xx-o sicmic\main.o --omf_browse sicmic\main.crf --depend sicmic\main.d)
+F (../Src/main.c)(0x57330033)(-c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include --C99-I C:\Users\Hannes\Documents\GitHub\MiCSiC\Master\SiCMiC\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\1.5.0\Device\Include-D__UVISION_VERSION="518" -D_RTE_ -DSTM32L053xx -DUSE_HAL_DRIVER -DSTM32L053xx-o sicmic\main.o --omf_browse sicmic\main.crf --depend sicmic\main.d)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal.h)(0x5710C495)
 I (../Inc/stm32l0xx_hal_conf.h)(0x5731A5EA)
 I (../Inc/mxconstants.h)(0x57220F50)
@@ -294,7 +294,7 @@ I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_pwr_ex.h)(0x5710C495)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h)(0x5710C495)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart_ex.h)(0x5710C495)
 I (../Inc/stm32l0xx_it.h)(0x57220F4E)
-F (..\Src\usart.c)(0x5731E432)(-c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include --C99-I C:\Users\Hannes\Documents\GitHub\MiCSiC\Master\SiCMiC\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\1.5.0\Device\Include-D__UVISION_VERSION="518" -D_RTE_ -DSTM32L053xx -DUSE_HAL_DRIVER -DSTM32L053xx-o sicmic\usart.o --omf_browse sicmic\usart.crf --depend sicmic\usart.d)
+F (..\Src\usart.c)(0x5732F624)(-c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc -I ../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32L0xx/Include --C99-I C:\Users\Hannes\Documents\GitHub\MiCSiC\Master\SiCMiC\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\1.5.0\Device\Include-D__UVISION_VERSION="518" -D_RTE_ -DSTM32L053xx -DUSE_HAL_DRIVER -DSTM32L053xx-o sicmic\usart.o --omf_browse sicmic\usart.crf --depend sicmic\usart.d)
 I (../Inc/usart.h)(0x57319348)
 I (../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal.h)(0x5710C495)
 I (../Inc/stm32l0xx_hal_conf.h)(0x5731A5EA)

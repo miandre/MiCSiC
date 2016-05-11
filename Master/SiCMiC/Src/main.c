@@ -100,8 +100,8 @@ uint32_t timeTaken;
 
 int main(void)
 {
-	tickCounterStart =0;
-	tickCounterStop = 0;
+	tickCounterStart = 0;
+	tickCounterStop  = 0;
 	value=0;
 	timeTaken=0;
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -178,7 +178,7 @@ int main(void)
 	send_message(message_pointer);
 	
 	//Send UART Message
-	HAL_UART_Transmit(&huart1,(uint8_t*)&hej, 3, 10);
+	HAL_UART_Transmit(&huart1,(uint8_t*)&message, 18, 10);
 	huart1.State=HAL_UART_STATE_READY;
 	
   /* Infinite loop */
@@ -273,7 +273,7 @@ uint8_t* create_i2c_package(uint8_t message[]){
 		checksum += *ptr;
 		ptr++;
 	}
-	message[17] = checksum;
+	message[17] = '\n';
 	
 	return (uint8_t *) message;
 }

@@ -133,11 +133,11 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4107</DriverSelection>
+            <DriverSelection>4103</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -373,9 +373,6 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>::CMSIS</GroupName>
-        </Group>
-        <Group>
           <GroupName>Application/User</GroupName>
           <Files>
             <File>
@@ -417,6 +414,11 @@
               <FileName>stm32l0xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/stm32l0xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\usart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -523,6 +525,21 @@
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_gpio.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32l0xx_hal_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l0xx_hal_uart_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_uart_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l0xx_hal_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_usart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -544,6 +561,9 @@
               <FilePath>startup_stm32l053xx.s</FilePath>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
     </Target>

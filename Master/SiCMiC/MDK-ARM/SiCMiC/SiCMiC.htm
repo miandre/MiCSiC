@@ -3,7 +3,7 @@
 <title>Static Call Graph - [SiCMiC\SiCMiC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image SiCMiC\SiCMiC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Tue May 10 16:13:33 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Wed May 11 11:49:41 2016
 <BR><P>
 <H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -662,7 +662,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[61]"></a>MX_USART1_UART_Init</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, usart.o(i.MX_USART1_UART_Init))
+<P><STRONG><a name="[61]"></a>MX_USART1_UART_Init</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, usart.o(i.MX_USART1_UART_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = MX_USART1_UART_Init &rArr; HAL_UART_Init &rArr; UART_SetConfig &rArr; __aeabi_ui2d &rArr; _double_epilogue &rArr; __aeabi_llsl
 </UL>
 <BR>[Calls]<UL><LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Init
@@ -751,13 +751,13 @@ Global Symbols
 
 <P><STRONG><a name="[80]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
-<P><STRONG><a name="[6b]"></a>create_i2c_package</STRONG> (Thumb, 70 bytes, Stack size 24 bytes, main.o(i.create_i2c_package))
-<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = create_i2c_package
+<P><STRONG><a name="[6b]"></a>create_i2c_package</STRONG> (Thumb, 64 bytes, Stack size 20 bytes, main.o(i.create_i2c_package))
+<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = create_i2c_package
 </UL>
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 298 bytes, Stack size 24 bytes, main.o(i.main))
+<P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 292 bytes, Stack size 24 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 212<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_OscConfig &rArr; HAL_InitTick &rArr; HAL_RCC_GetHCLKFreq &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
