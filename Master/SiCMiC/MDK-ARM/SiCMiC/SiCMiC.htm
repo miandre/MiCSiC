@@ -3,9 +3,9 @@
 <title>Static Call Graph - [SiCMiC\SiCMiC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image SiCMiC\SiCMiC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Wed May 11 11:49:41 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon May 16 14:43:02 2016
 <BR><P>
-<H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        228 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 main &rArr; SystemClock_Config &rArr; HAL_RCC_OscConfig &rArr; HAL_InitTick &rArr; HAL_RCC_GetHCLKFreq &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
 <P>
@@ -392,7 +392,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR>[Called By]<UL><LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readRollingADC
+<LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[3a]"></a>HAL_GPIO_Init</STRONG> (Thumb, 346 bytes, Stack size 24 bytes, stm32l0xx_hal_gpio.o(i.HAL_GPIO_Init))
@@ -618,7 +619,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[59]"></a>MX_ADC_Init</STRONG> (Thumb, 198 bytes, Stack size 16 bytes, adc.o(i.MX_ADC_Init))
+<P><STRONG><a name="[59]"></a>MX_ADC_Init</STRONG> (Thumb, 216 bytes, Stack size 16 bytes, adc.o(i.MX_ADC_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = MX_ADC_Init &rArr; HAL_ADC_Init &rArr; HAL_ADC_MspInit &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_Init
@@ -751,14 +752,14 @@ Global Symbols
 
 <P><STRONG><a name="[80]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
-<P><STRONG><a name="[6b]"></a>create_i2c_package</STRONG> (Thumb, 64 bytes, Stack size 20 bytes, main.o(i.create_i2c_package))
-<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = create_i2c_package
+<P><STRONG><a name="[6b]"></a>create_i2c_package</STRONG> (Thumb, 98 bytes, Stack size 32 bytes, main.o(i.create_i2c_package))
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = create_i2c_package
 </UL>
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 292 bytes, Stack size 24 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 212<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_OscConfig &rArr; HAL_InitTick &rArr; HAL_RCC_GetHCLKFreq &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
+<P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 342 bytes, Stack size 40 bytes, main.o(i.main))
+<BR><BR>[Stack]<UL><LI>Max Depth = 228<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_OscConfig &rArr; HAL_InitTick &rArr; HAL_RCC_GetHCLKFreq &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_IWDG_Init
@@ -781,10 +782,11 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
 </UL>
-<P><STRONG><a name="[68]"></a>readRollingADC</STRONG> (Thumb, 140 bytes, Stack size 8 bytes, main.o(i.readRollingADC))
+<P><STRONG><a name="[68]"></a>readRollingADC</STRONG> (Thumb, 146 bytes, Stack size 8 bytes, main.o(i.readRollingADC))
 <BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = readRollingADC &rArr; HAL_ADC_Start &rArr; ADC_Enable &rArr; ADC_DelayMicroSecond &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_Start
+<BR>[Calls]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_Start
 </UL>
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>

@@ -61,15 +61,7 @@ static struct experiment_package  	 experiments[8];
 
 uint32_t 													  timerDelay = 1;
 	
-/* Defines -------------------------------------------------------------------*/
-#define SiC_TEMPERATURE							 ADC_CHANNEL_0
-#define SiC_VRB											 ADC_CHANNEL_9
-#define SiC_VRC											 ADC_CHANNEL_2
-#define SiC_UBE											 ADC_CHANNEL_3
-#define S_TEMPERATURE 							 ADC_CHANNEL_5
-#define S_VRB 											 ADC_CHANNEL_6
-#define S_VRC 											 ADC_CHANNEL_7
-#define S_UBE 											 ADC_CHANNEL_8
+
 /*
     PA0     ------> ADC_IN0
     PA1     ------> ADC_IN1
@@ -131,32 +123,41 @@ int main(void)
 		//HAL_GPIO_TogglePin(LD_G_GPIO_Port, LD_G_Pin);
 		
 	tickCounterStart = HAL_GetTick();
-	
-	HAL_Delay(5);	
+	setDAC(0);
+	HAL_Delay(2);
+		
 	/* Set DAC at voltage level 1 (3.1v 0xF07)*/
 	setDAC(0xF07);
-	for(int i = 0; i < 16; i++){
+	HAL_Delay(2);
++	for(int i = 0; i < 16; i++){
+		
 		readRollingADC(0);
 	}
-	
-	HAL_Delay(5);
+	setDAC(0);
+	HAL_Delay(2);
 		/* Set DAC at voltage level 1 (2.1v 0xA2E)*/
 	setDAC(0xA2E);
+	HAL_Delay(2);
 	for(int i = 0; i < 16; i++){
 		readRollingADC(2);
 	}
-	
-	HAL_Delay(5);
+
+		setDAC(0);
+	HAL_Delay(2);
 		/* Set DAC at voltage level 1 (1.1v 0x555)*/
 	setDAC(0x555);
+	HAL_Delay(2);
 	for(int i = 0; i < 16; i++){
+		
 		readRollingADC(4);
 	}
-	
-	HAL_Delay(5);
-		/* Set DAC at voltage level 1 (0.2v 0xF8)*/
-	setDAC(0xF8);
+	setDAC(0);
+	HAL_Delay(2);
+		/* Set DAC at voltage level 1 (0.5v 0x260)*/
+	setDAC(0x260);
+	HAL_Delay(2);
 	for(int i = 0; i < 16; i++){
+		
 		readRollingADC(6);
 	}
 	
@@ -167,7 +168,7 @@ int main(void)
 		shiftAverages();
 	
 	/* Create I2C message */
-	uint8_t message[18] = {0};
+	uint8_t message[34] = {0};
 	uint8_t* message_pointer = create_i2c_package(message);
 	
 	//UART TEST MESSAGE
@@ -178,7 +179,7 @@ int main(void)
 	send_message(message_pointer);
 	
 	//Send UART Message
-	HAL_UART_Transmit(&huart1,(uint8_t*)&message, 18, 10);
+	HAL_UART_Transmit(&huart1,(uint8_t*)&message, 34, 10);
 	huart1.State=HAL_UART_STATE_READY;
 	
   /* Infinite loop */
@@ -210,7 +211,7 @@ void setDAC(uint32_t voltage){
 }
 
 void readRollingADC(int index){
-	
+	HAL_Delay(1);
 	if(HAL_ADC_Start(&hadc) != HAL_OK){
 		while(1) {}
 	}
@@ -226,7 +227,7 @@ void readRollingADC(int index){
 		
 	while(!(hadc.Instance->ISR & 0x4)){}
 	experiments[0+index].vrc += hadc.Instance->DR;
-		
+	
 	while(!(hadc.Instance->ISR & 0x4)){}
 	experiments[1+index].temperature += hadc.Instance->DR;
 
@@ -249,17 +250,27 @@ void send_message(uint8_t * message){
 
 uint8_t* create_i2c_package(uint8_t message[]){
 	
-	uint16_t raw_data[8] = {
+	uint16_t raw_data[16] = {
 		//First experiment
 		experiments[0].temperature,
 		experiments[0].ube,
 		experiments[0].vrb,
 		experiments[0].vrc,
 		//Second experiment
-		experiments[1].temperature,
-		experiments[1].ube,
-		experiments[1].vrb,
-		experiments[1].vrc
+		experiments[2].temperature,
+		experiments[2].ube,
+		experiments[2].vrb,
+		experiments[2].vrc,
+		//First experiment
+		experiments[4].temperature,
+		experiments[4].ube,
+		experiments[4].vrb,
+		experiments[4].vrc,
+	 //First experiment
+		experiments[6].temperature,
+		experiments[6].ube,
+		experiments[6].vrb,
+		experiments[6].vrc
 	};
 	
 	
@@ -268,12 +279,12 @@ uint8_t* create_i2c_package(uint8_t message[]){
 	uint8_t checksum = 0;
 	
 	message[0] = 16*8 + 8;
-	for(int i = 1; i < 17; i++){
+	for(int i = 1; i < 33; i++){
 		message[i] = *ptr;
 		checksum += *ptr;
 		ptr++;
 	}
-	message[17] = '\n';
+	message[33] = '\n';
 	
 	return (uint8_t *) message;
 }

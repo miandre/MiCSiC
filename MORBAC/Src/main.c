@@ -44,10 +44,10 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-/* USER CODE BEGIN PV */
-/* Private variables ---------------------------------------------------------*/
+uint8_t command;
 
-/* USER CODE END PV */
+/* External variables --------------------------------------------------------*/
+extern UART_HandleTypeDef huart1;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -57,9 +57,6 @@ void SystemClock_Config(void);
 
 /* USER CODE END PFP */
 
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 int main(void)
 {
@@ -83,20 +80,14 @@ int main(void)
   MX_IWDG_Init();
   MX_USART1_UART_Init();
 
-  /* USER CODE BEGIN 2 */
-
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   while (1)
   {
-  /* USER CODE END WHILE */
+ 
+HAL_UART_Receive(&huart1,&command,1,10);
 
-  /* USER CODE BEGIN 3 */
 
   }
-  /* USER CODE END 3 */
+
 
 }
 

@@ -72,6 +72,10 @@ void MX_ADC_Init(void)
 	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
 		while(1){}
 	}
+		sConfigAdc.Channel = ADC_CHANNEL_1;
+	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
+		while(1){}
+	}
 		sConfigAdc.Channel = ADC_CHANNEL_2;
 	if(HAL_ADC_ConfigChannel(&hadc, &sConfigAdc) != HAL_OK){
 		while(1){}
