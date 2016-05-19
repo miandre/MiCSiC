@@ -88,7 +88,7 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : PB2 PB10 PB11 PB12 
                            PB13 PB14 PB15 PB8 PB9 */
-  GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12 
+  GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_11|GPIO_PIN_12 
                           |GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15|GPIO_PIN_8|GPIO_PIN_9;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -104,7 +104,7 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : PB3-5 (LED) */
   GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_3 
-                          |GPIO_PIN_5;
+                          |GPIO_PIN_5|GPIO_PIN_10;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

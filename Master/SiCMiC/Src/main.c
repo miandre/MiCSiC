@@ -83,11 +83,16 @@ void send_message(uint8_t *);
 void setDAC(uint32_t);
 void readRollingADC(int);
 void shiftAverages(void);
+void normalRun(void);
+void graphTestSweep(int);
+void testProgram(void);
+uint8_t* create_graph_package(uint8_t[]);
 
 uint32_t tickCounterStart;
 uint32_t tickCounterStop;
 uint32_t value;
 uint32_t timeTaken;
+uint16_t graph_sweep[128]; //Varannan Vrc, varannan Vrb
 
 
 int main(void)
@@ -115,21 +120,40 @@ int main(void)
 	if(HAL_ADCEx_Calibration_Start(&hadc, ADC_SINGLE_ENDED) != HAL_OK){
 		while(1) {}
 	}
+	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,GPIO_PIN_SET);
 	
-	HAL_Delay(100);
-	  while (1)
-  {
+	HAL_Delay(2000);
+
 		
 		//HAL_GPIO_TogglePin(LD_G_GPIO_Port, LD_G_Pin);
 		
-	tickCounterStart = HAL_GetTick();
+		normalRun();
+		//testProgram();
+	
+	while(1){
+		/*
+			HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_15);
+		HAL_Delay(100);
+			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_3);
+		HAL_Delay(100);
+			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
+		HAL_Delay(100);
+			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_5);
+		HAL_Delay(100);
+		*/
+	}
+
+}
+
+void normalRun(){
+		tickCounterStart = HAL_GetTick();
 	setDAC(0);
 	HAL_Delay(2);
 		
 	/* Set DAC at voltage level 1 (3.1v 0xF07)*/
 	setDAC(0xF07);
 	HAL_Delay(2);
-+	for(int i = 0; i < 16; i++){
+	for(int i = 0; i < 16; i++){
 		
 		readRollingADC(0);
 	}
@@ -171,9 +195,6 @@ int main(void)
 	uint8_t message[34] = {0};
 	uint8_t* message_pointer = create_i2c_package(message);
 	
-	//UART TEST MESSAGE
-	uint8_t hej[3] = {'h','e','j'};
-	
 	
 	/* Send message */
 	send_message(message_pointer);
@@ -184,6 +205,7 @@ int main(void)
 	
   /* Infinite loop */
 		while(1){
+			/*
 	HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_15);
 		HAL_Delay(100);
 			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_3);
@@ -192,11 +214,56 @@ int main(void)
 		HAL_Delay(100);
 			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_5);
 		HAL_Delay(100);
+			*/
 		
 	}
 
-  }
+ }
+	
+void testProgram(){
+   
+ 
+    for(int i = 0; i < 128; i+=2){
+        setDAC(i*32);
+        HAL_Delay(1);
+            graphTestSweep(i);
+    }      
+    uint8_t graph_message[256] = {0};
+    uint8_t* message_pointer = create_graph_package(graph_message);
+   
+   	//Send UART Message
+		HAL_UART_Transmit(&huart1,(uint8_t*)&graph_message, 256, 10);
+		huart1.State=HAL_UART_STATE_READY;
 }
+ 
+void graphTestSweep(int i){
+   
+    if(HAL_ADC_Start(&hadc) != HAL_OK){
+        while(1) {}
+    }
+   
+    while(!(hadc.Instance->ISR & 0x4)){}
+    graph_sweep[i] = hadc.Instance->DR;
+    HAL_Delay(1);
+    while(!(hadc.Instance->ISR & 0x4)){}
+    graph_sweep[i+1] = hadc.Instance->DR;
+   
+}
+ 
+ 
+uint8_t* create_graph_package(uint8_t message[]){
+ 
+    uint8_t* ptr = (uint8_t*) &graph_sweep;
+   
+    for(int i = 0; i < 256; i++){
+        message[i] = *ptr;
+        ptr++;
+    }
+   
+    return (uint8_t *) message;
+ 
+}
+
 void shiftAverages(){
 	for(int i = 0; i < 8; i++){
 		experiments[i].temperature = (experiments[i].temperature >> 4);
