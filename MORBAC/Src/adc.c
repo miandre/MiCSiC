@@ -42,11 +42,12 @@
 /* USER CODE END 0 */
 
 ADC_HandleTypeDef hadc;
+ADC_ChannelConfTypeDef sConfig;
 
 /* ADC init function */
 void MX_ADC_Init(void)
 {
-  ADC_ChannelConfTypeDef sConfig;
+
 
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
@@ -69,86 +70,76 @@ void MX_ADC_Init(void)
   HAL_ADC_Init(&hadc);
 
     /**Configure for the selected ADC regular channel to be converted. 
-    */
+		***This is done in the main program right now. Us this part if you want to read from more than one
+		***ADC
+		**/
+		
+		/*
+    
   sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+   
   sConfig.Channel = ADC_CHANNEL_1;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+   
   sConfig.Channel = ADC_CHANNEL_2;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+   
   sConfig.Channel = ADC_CHANNEL_3;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+  
   sConfig.Channel = ADC_CHANNEL_4;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+    
   sConfig.Channel = ADC_CHANNEL_5;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+ 
   sConfig.Channel = ADC_CHANNEL_6;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+
   sConfig.Channel = ADC_CHANNEL_7;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+ 
   sConfig.Channel = ADC_CHANNEL_8;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+
   sConfig.Channel = ADC_CHANNEL_9;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+
   sConfig.Channel = ADC_CHANNEL_10;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+
   sConfig.Channel = ADC_CHANNEL_11;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+
   sConfig.Channel = ADC_CHANNEL_12;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+
   sConfig.Channel = ADC_CHANNEL_13;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+
   sConfig.Channel = ADC_CHANNEL_14;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-    /**Configure for the selected ADC regular channel to be converted. 
-    */
+
   sConfig.Channel = ADC_CHANNEL_15;
   HAL_ADC_ConfigChannel(&hadc, &sConfig);
-
+*/
 }
 
 void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
