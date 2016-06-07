@@ -17,18 +17,21 @@
 #include <string.h>
 
 /* Defines -----------------------------------------------------------------*/
-#define ledPin 									GPIO_PIN_12
-#define sensorVoltageSupplyPin 	GPIO_PIN_13
+#define ledPin 									GPIO_PIN_9
+#define sensorVoltageSupplyPin 	GPIO_PIN_8
 #define HIGH										GPIO_PIN_SET
 #define LOW 										GPIO_PIN_RESET
-#define timeDelay								5000
+#define timeDelay								1000
 #define sensorDataPin						ADC_CHANNEL_4
+#define INVALID									0xFFFF
 
 /* Private variables ---------------------------------------------------------*/
 
 uint8_t serial_input;
 uint16_t sensorValue;
 float voltage;
+
+uint8_t strLength;
 
 /*The "Float" (with capital F) data format is used when a float is sent via
 the serial bus (UART)
@@ -53,7 +56,7 @@ uint16_t analogRead(uint32_t);
 void delay(volatile uint32_t);
 void Serial_printString(char[]);
 void Serial_PrintValue(float);
-
+void Serial_PrintRaw(uint16_t);
 
 
 /***********************************************************************************
@@ -86,7 +89,7 @@ int main(void)
 		delay(100);		
 	}
 	
-	
+	//Serial_printString("hej");
 	/****************************************************************************/
 	/***Main loop of the program. Equal to "loop()" in the Arduino code**********/
 	
@@ -98,7 +101,7 @@ int main(void)
 		
 			makeMeasurements();	//make sensor measurements
 			
-			Serial_PrintValue(voltage);	//send the voltage red from the sensor
+			Serial_PrintRaw(sensorValue);	//send the voltage red from the sensor
 			
 			delay(1000); //wait a while
 
@@ -108,7 +111,8 @@ int main(void)
 }
 /********************End of main loop************************/
 
-
+// 0xABCD
+// {0xAB, 0xCD}
 
 /***********************************************************
 makeMeasurements() reads the incomming serial command.
@@ -122,7 +126,7 @@ void makeMeasurements(){
 int command = serial_input-'0';
 	
 	
-	if(command == 0){
+	if(command == 1){
 		digitalWrite(ledPin, HIGH);
 		digitalWrite(sensorVoltageSupplyPin, HIGH);
 		delay(timeDelay);
@@ -134,7 +138,7 @@ int command = serial_input-'0';
 		delay(1000);
 	}
 	
-		else if(command == 1){
+		else if(command == 0){
 		digitalWrite(ledPin, LOW);
 		digitalWrite(sensorVoltageSupplyPin, HIGH);
 		delay(timeDelay);
@@ -145,7 +149,7 @@ int command = serial_input-'0';
 		digitalWrite(sensorVoltageSupplyPin, LOW);
 		delay(1000);
 	}
-	else Serial_printString("Invalid");
+	else Serial_PrintRaw(INVALID);
 	
 }
 
@@ -177,7 +181,7 @@ high or low
 -----------------------------------------------------------*/
 void digitalWrite(uint16_t pinName, GPIO_PinState state ){
 
-	HAL_GPIO_WritePin(GPIOB, pinName, state);
+	HAL_GPIO_WritePin(GPIOC, pinName, state);
 
 }
 
@@ -214,24 +218,36 @@ Serial_PrintString() is used to send strings over the UART serial buss
 ----------------------------------------------------------------------*/
 void Serial_printString(char input[]){
 	
-	char ln[1] = {'\n'};
-	strcat(input,ln);
-
-		HAL_UART_Transmit(&huart1,(uint8_t*)&input, strlen(input), 10);
+  const char ln[1] = {'\n'};
+ 	strcat(input,ln);
+	strLength = strlen(input);
+	
+		HAL_UART_Transmit(&huart1,(uint8_t*) input, strLength, 10);
 		huart1.State=HAL_UART_STATE_READY;	
 
 }
+
+void Serial_PrintRaw(uint16_t input){
+	
+	uint8_t converted[2];
+	converted[0] = (uint8_t) (input>>8);
+	converted[1] = (uint8_t) (input&0XFF);
+		
+	HAL_UART_Transmit(&huart1, (uint8_t*)&converted, 2, 10);
+	huart1.State = HAL_UART_STATE_READY;
+}
+
 
 /*--------------------------------------------------------------------
 Serial_PrintValue() is used to send floats over the UART serial buss
 ----------------------------------------------------------------------*/
 
 void Serial_PrintValue(float input){
-		
+			
 		Float tmp;
 		tmp.f = input;
 
-		HAL_UART_Transmit(&huart1,(uint8_t*)&tmp, 4, 10);
+		HAL_UART_Transmit(&huart1,(uint8_t*)tmp.i, 4, 10);
 		huart1.State=HAL_UART_STATE_READY;	
 
 }

@@ -387,17 +387,18 @@ ARM Macro Assembler    Page 6
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0+ --apcs=inter
 work --depend=sicmic\startup_stm32l053xx.d -osicmic\startup_stm32l053xx.o -IC:\
-Users\Hannes\Documents\GitHub\MiCSiC\Master\SiCMiC\MDK-ARM\RTE -IC:\Keil_v5\ARM
+Users\Micke\Documents\GitHub\MiCSiC\Master\SiCMiC\MDK-ARM\RTE -I"C:\Program Fil
 
 
 
 ARM Macro Assembler    Page 7 
 
 
-\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\1.
-5.0\Device\Include --predefine="__EVAL SETA 1" --predefine="__MICROLIB SETA 1" 
---predefine="__UVISION_VERSION SETA 518" --predefine="_RTE_ SETA 1" --predefine
-="STM32L053xx SETA 1" --list=startup_stm32l053xx.lst startup_stm32l053xx.s
+es (x86)\Keil\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include" -I"C:\Program Files (x86)
+\Keil\ARM\PACK\Keil\STM32L0xx_DFP\1.5.0\Device\Include" --predefine="__MICROLIB
+ SETA 1" --predefine="__UVISION_VERSION SETA 518" --predefine="_RTE_ SETA 1" --
+predefine="STM32L053xx SETA 1" --list=startup_stm32l053xx.lst startup_stm32l053
+xx.s
 
 
 
@@ -906,4 +907,4 @@ Symbol: __main
       At line 140 in file startup_stm32l053xx.s
 Comment: __main used once
 2 symbols
-387 symbols in table
+386 symbols in table
