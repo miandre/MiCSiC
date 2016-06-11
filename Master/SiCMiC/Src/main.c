@@ -1,23 +1,35 @@
+/**
+  ******************************************************************************
+  * File Name          : main.c
 
-/*
-TODO: 
-
-Fixa en error handling på att vi fastnar i check på eoc
-
-Fortsätt timea ADC. I dagsläget ligger vi på 0,8 ms (med 230cyclesBlaBla). 0,2 med 1cycle5
-Vi fastnar i EOC när vi mäter väldigt många gånger, lista ut varför. 
-
-
-Timea ADC.
-
-Fixa USART-kommunikation till Processing
-
-DONE:
-
-ADC lirar utan delay. Löst genom att kolla EOC.
-
-
-*/
+  ******************************************************************************
+  *
+  * COPYRIGHT(c) 2016 STMicroelectronics
+  *
+  * Redistribution and use in source and binary forms, with or without modification,
+  * are permitted provided that the following conditions are met:
+  *   1. Redistributions of source code must retain the above copyright notice,
+  *      this list of conditions and the following disclaimer.
+  *   2. Redistributions in binary form must reproduce the above copyright notice,
+  *      this list of conditions and the following disclaimer in the documentation
+  *      and/or other materials provided with the distribution.
+  *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  *      may be used to endorse or promote products derived from this software
+  *      without specific prior written permission.
+  *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  *
+  ******************************************************************************
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l0xx_hal.h"
@@ -45,22 +57,23 @@ struct experiment_package {
 };
 
 /* Private variables ---------------------------------------------------------*/
-/* ADC channel configuration structure declaration */
-extern ADC_ChannelConfTypeDef        sConfigAdc;
-extern DAC_ChannelConfTypeDef 			 sConfigDac;
+
 
 uint32_t                      			 aResultDMA;
-
-extern ADC_HandleTypeDef             hadc;
-extern DAC_HandleTypeDef    				 hdac;
-extern UART_HandleTypeDef 						huart1;
-
 uint16_t 														 number_of_tests = 16;
-
-static struct experiment_package  	 experiments[8];
-
 uint32_t 													  timerDelay = 1;
 	
+
+/* External variables*/
+extern ADC_ChannelConfTypeDef        sConfigAdc;
+extern DAC_ChannelConfTypeDef 			 sConfigDac;
+extern ADC_HandleTypeDef             hadc;
+extern DAC_HandleTypeDef    				 hdac;
+extern UART_HandleTypeDef 					 huart1;
+extern I2C_HandleTypeDef 							hi2c1;
+static struct experiment_package  	 experiments[8];
+
+
 
 /*
     PA0     ------> ADC_IN0
@@ -74,8 +87,7 @@ uint32_t 													  timerDelay = 1;
     PB1     ------> ADC_IN9 
 		*/
 
-//#define TEST /* Uncomment this before launch! */
-#define TEST_TIME 
+
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 uint8_t* create_i2c_package(uint8_t[]);
@@ -88,6 +100,7 @@ void graphTestSweep(int);
 void testProgram(void);
 void SystemPower_Config(void);
 uint8_t* create_graph_package(uint8_t[]);
+uint16_t receive_OBC_message();
 
 uint32_t tickCounterStart;
 uint32_t tickCounterStop;
@@ -117,46 +130,33 @@ int main(void)
 	MX_USART1_UART_Init();
 	
 
-	
+	//Calibrate ADCs in the beginning of every run
 	if(HAL_ADCEx_Calibration_Start(&hadc, ADC_SINGLE_ENDED) != HAL_OK){
 		while(1) {}
 	}
-	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,GPIO_PIN_SET);
-	
-	HAL_Delay(1);
 
+	//Run experiment
+	normalRun();
 		
-		//HAL_GPIO_TogglePin(LD_G_GPIO_Port, LD_G_Pin);
-		
-		normalRun();
-		//testProgram();
-	
-	while(1){
-		/*
-			HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_15);
-		HAL_Delay(100);
-			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_3);
-		HAL_Delay(100);
-			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
-		HAL_Delay(100);
-			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_5);
-		HAL_Delay(100);
-		*/
-	}
-
 }
 
 void normalRun(){
-		tickCounterStart = HAL_GetTick();
+
+	uint16_t obc_message = receive_OBC_message(); //Receive message from OBC. Not used, read text in function.
+	
+	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,GPIO_PIN_SET); // Turn on power supply
+	HAL_Delay(80); //Wait for power supply to settle
+  
+	//tickCounterStart = HAL_GetTick(); //Only used for timing purposes
+	
 	setDAC(0);
 	HAL_Delay(2);
 		
 	/* Set DAC at voltage level 1 (3.1v 0xF07)*/
 	setDAC(0xF07);
 	HAL_Delay(2);
-	for(int i = 0; i < 16; i++){
-		
-		readRollingADC(0);
+	for(int i = 0; i < 16; i++){ 
+		readRollingADC(0); //All inputs 16 times.
 	}
 	setDAC(0);
 	HAL_Delay(2);
@@ -186,10 +186,9 @@ void normalRun(){
 		readRollingADC(6);
 	}
 	
-
 	
-	tickCounterStop = HAL_GetTick();
-	timeTaken = (tickCounterStop  -  tickCounterStart);
+	//tickCounterStop = HAL_GetTick(); //Not used, only for testing purposes.
+	//timeTaken = (tickCounterStop  -  tickCounterStart); 
 		shiftAverages();
 	
 	/* Create I2C message */
@@ -200,78 +199,47 @@ void normalRun(){
 	/* Send message */
 	send_message(message_pointer);
 	
+	/*
+	This is used for testing purposes. Connect USART to computer,
+	run the test program written in Processing. 
+	
 	//Send UART Message
 	HAL_UART_Transmit(&huart1,(uint8_t*)&message, 34, 10);
 	huart1.State=HAL_UART_STATE_READY;
+	*/
 	
-  /* Infinite loop */
-		while(1){
+	SystemPower_Config();
 			
-			
-			SystemPower_Config();
-			
-			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
-			/*
-	HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_15);
-		HAL_Delay(100);
-			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_3);
-		HAL_Delay(100);
-			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
-		HAL_Delay(100);
-			HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_5);
-		HAL_Delay(100);
-			*/
-		
-	}
-
+	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
+	
  }
 	
-void testProgram(){
-   
-    for(int i = 0; i < 192; i+=3){
-        setDAC(i*32);
-        HAL_Delay(1);
-        graphTestSweep(i);
-    }      
-    uint8_t graph_message[384] = {0};
-    uint8_t* message_pointer = create_graph_package(graph_message);
-   
-   	//Send UART Message
-		HAL_UART_Transmit(&huart1,(uint8_t*)&graph_message, 384, 10);
-		huart1.State=HAL_UART_STATE_READY;
-}
  
-void graphTestSweep(int i){
-   
-    if(HAL_ADC_Start(&hadc) != HAL_OK){
-        while(1) {}
-    }
-   
-    while(!(hadc.Instance->ISR & 0x4)){}
-    graph_sweep[i] = hadc.Instance->DR;
-    HAL_Delay(1);
-    while(!(hadc.Instance->ISR & 0x4)){}
-    graph_sweep[i+1] = hadc.Instance->DR;
-		HAL_Delay(1);
-    while(!(hadc.Instance->ISR & 0x4)){}
-    graph_sweep[i+2] = hadc.Instance->DR;
-   
-}
+uint16_t receive_OBC_message(){
+	
+	/*
+	
+	Since the I2C communication with the OBC is not yet final,
+	this function is left empty as of now. 
+	There is a high probablility that there will not be a message
+	from the OBC in this stage, since there would be nothing 
+	to gain from it.
+	
+	*/
+	
+	return 0;
+}	
  
- 
-uint8_t* create_graph_package(uint8_t message[]){
- 
-    uint8_t* ptr = (uint8_t*) &graph_sweep;
-   
-    for(int i = 0; i < 384; i++){
-        message[i] = *ptr;
-        ptr++;
-    }
-   
-    return (uint8_t *) message;
- 
-}
 
+/*
+
+Calculate the average of the readings.
+Note that this could be removed, to send the complete
+uncalculate data instead. This would actually give
+a higher precision, since shifting the data
+deletes information.
+
+*/
 void shiftAverages(){
 	for(int i = 0; i < 8; i++){
 		experiments[i].temperature = (experiments[i].temperature >> 4);
@@ -287,43 +255,71 @@ void setDAC(uint32_t voltage){
 
 void readRollingADC(int index){
 	HAL_Delay(1);
+
+	//Start ADC reading
 	if(HAL_ADC_Start(&hadc) != HAL_OK){
 		while(1) {}
 	}
 	
-	while(!(hadc.Instance->ISR & 0x4)){}
+	//Wait for EOC (end of conversion)
+	while(!(hadc.Instance->ISR & ADC_ISR_EOC)){}
+	//Read ADC value
 	experiments[0+index].temperature += hadc.Instance->DR;
 
-	while(!(hadc.Instance->ISR & 0x4)){}
+		
+	//Repeat for all channels.	
+	while(!(hadc.Instance->ISR & ADC_ISR_EOC)){}
 	experiments[0+index].ube += hadc.Instance->DR;
 	
-  while(!(hadc.Instance->ISR & 0x4)){}
+  while(!(hadc.Instance->ISR & ADC_ISR_EOC)){}
 	experiments[0+index].vrb += hadc.Instance->DR;
 		
-	while(!(hadc.Instance->ISR & 0x4)){}
+	while(!(hadc.Instance->ISR & ADC_ISR_EOC)){}
 	experiments[0+index].vrc += hadc.Instance->DR;
 	
-	while(!(hadc.Instance->ISR & 0x4)){}
+	while(!(hadc.Instance->ISR & ADC_ISR_EOC)){}
 	experiments[1+index].temperature += hadc.Instance->DR;
 
-	while(!(hadc.Instance->ISR & 0x4)){}
+	while(!(hadc.Instance->ISR & ADC_ISR_EOC)){}
 	experiments[1+index].ube += hadc.Instance->DR;
 	
-  while(!(hadc.Instance->ISR & 0x4)){}
+  while(!(hadc.Instance->ISR & ADC_ISR_EOC)){}
 	experiments[1+index].vrb += hadc.Instance->DR;
 		
-	while(!(hadc.Instance->ISR & 0x4)){}
+	while(!(hadc.Instance->ISR & ADC_ISR_EOC)){}
 	experiments[1+index].vrc += hadc.Instance->DR;
 		
 }
 
 void send_message(uint8_t * message){
 	
-	//TODO Send data.
+	/*************************DISCLAIMER****************
+	This code for the I2C communication is not valid for communication and only
+	used for test purposes.
+	This code should be rewritten before use
+	********************************************************/
+	
+	while(HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)
+   {
+		 
+   }
+	
+	while(HAL_I2C_Slave_Transmit(&hi2c1, (uint8_t*) &message, 33, 10)!= HAL_OK)
+	{
+	 
+	}
 	
 }
 
 uint8_t* create_i2c_package(uint8_t message[]){
+	
+	
+	
+	/*
+	Note that this is only the measurements for the Si transistor.
+	To send all data, add experiments[1], experiments[3]... to the message,
+	and change to the correct size.
+	*/
 	
 	uint16_t raw_data[16] = {
 		//First experiment
@@ -359,13 +355,15 @@ uint8_t* create_i2c_package(uint8_t message[]){
 		checksum += *ptr;
 		ptr++;
 	}
-	message[33] = '\n';
+	//message[33] = '\n'; //Only used when sending to Processing.
+	message[33] = checksum;
 	
 	return (uint8_t *) message;
 }
 
 
 /** System Clock Configuration
+Code auto generated by CubeMX
 */
 void SystemClock_Config(void)
 {
@@ -409,8 +407,12 @@ void SystemClock_Config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
+
 void SystemPower_Config(void)
 {
+	//Used before entering power STOP mode.
+	//Should be revised, could be optimized. 
+
   GPIO_InitTypeDef GPIO_InitStructure;
 
   /* Enable Ultra low power mode */
