@@ -86,13 +86,14 @@ void shiftAverages(void);
 void normalRun(void);
 void graphTestSweep(int);
 void testProgram(void);
+void SystemPower_Config(void);
 uint8_t* create_graph_package(uint8_t[]);
 
 uint32_t tickCounterStart;
 uint32_t tickCounterStop;
 uint32_t value;
 uint32_t timeTaken;
-uint16_t graph_sweep[128]; //Varannan Vrc, varannan Vrb
+uint16_t graph_sweep[192]; //Varannan Vrc, varannan Vrb
 
 
 int main(void)
@@ -122,7 +123,7 @@ int main(void)
 	}
 	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_10,GPIO_PIN_SET);
 	
-	HAL_Delay(2000);
+	HAL_Delay(1);
 
 		
 		//HAL_GPIO_TogglePin(LD_G_GPIO_Port, LD_G_Pin);
@@ -205,6 +206,11 @@ void normalRun(){
 	
   /* Infinite loop */
 		while(1){
+			
+			
+			SystemPower_Config();
+			
+			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
 			/*
 	HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_15);
 		HAL_Delay(100);
@@ -222,17 +228,16 @@ void normalRun(){
 	
 void testProgram(){
    
- 
-    for(int i = 0; i < 128; i+=2){
+    for(int i = 0; i < 192; i+=3){
         setDAC(i*32);
         HAL_Delay(1);
-            graphTestSweep(i);
+        graphTestSweep(i);
     }      
-    uint8_t graph_message[256] = {0};
+    uint8_t graph_message[384] = {0};
     uint8_t* message_pointer = create_graph_package(graph_message);
    
    	//Send UART Message
-		HAL_UART_Transmit(&huart1,(uint8_t*)&graph_message, 256, 10);
+		HAL_UART_Transmit(&huart1,(uint8_t*)&graph_message, 384, 10);
 		huart1.State=HAL_UART_STATE_READY;
 }
  
@@ -247,6 +252,9 @@ void graphTestSweep(int i){
     HAL_Delay(1);
     while(!(hadc.Instance->ISR & 0x4)){}
     graph_sweep[i+1] = hadc.Instance->DR;
+		HAL_Delay(1);
+    while(!(hadc.Instance->ISR & 0x4)){}
+    graph_sweep[i+2] = hadc.Instance->DR;
    
 }
  
@@ -255,7 +263,7 @@ uint8_t* create_graph_package(uint8_t message[]){
  
     uint8_t* ptr = (uint8_t*) &graph_sweep;
    
-    for(int i = 0; i < 256; i++){
+    for(int i = 0; i < 384; i++){
         message[i] = *ptr;
         ptr++;
     }
@@ -401,9 +409,45 @@ void SystemClock_Config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
-/* USER CODE BEGIN 4 */
+void SystemPower_Config(void)
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
 
-/* USER CODE END 4 */
+  /* Enable Ultra low power mode */
+  HAL_PWREx_EnableUltraLowPower();
+  
+  /* Enable the fast wake up from Ultra low power mode */
+  HAL_PWREx_EnableFastWakeUp();
+
+  /* Select HSI as system clock source after Wake Up from Stop mode */
+  __HAL_RCC_WAKEUPSTOP_CLK_CONFIG(RCC_STOP_WAKEUPCLOCK_HSI);
+  
+  /* Enable GPIOs clock */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOH_CLK_ENABLE();
+
+  /* Configure all GPIO port pins in Analog Input mode (floating input trigger OFF) */
+  GPIO_InitStructure.Pin = GPIO_PIN_All;
+  GPIO_InitStructure.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStructure.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStructure); 
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStructure);
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStructure);
+  HAL_GPIO_Init(GPIOH, &GPIO_InitStructure);
+
+  /* Disable GPIOs clock */
+  __HAL_RCC_GPIOA_CLK_DISABLE();
+  __HAL_RCC_GPIOB_CLK_DISABLE();
+  __HAL_RCC_GPIOC_CLK_DISABLE();
+  __HAL_RCC_GPIOD_CLK_DISABLE();
+  __HAL_RCC_GPIOH_CLK_DISABLE();
+
+}
+
 
 #ifdef USE_FULL_ASSERT
 
