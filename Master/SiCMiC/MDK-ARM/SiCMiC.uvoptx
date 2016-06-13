@@ -73,7 +73,7 @@
         <LExpSel>0</LExpSel>
       </OPTXL>
       <OPTFL>
-        <tvExp>1</tvExp>
+        <tvExp>0</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
         <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
@@ -82,17 +82,17 @@
         <Book>
           <Number>0</Number>
           <Title>User Manual (STM32L053-Discovery)</Title>
-          <Path>C:\Program Files (x86)\Keil\ARM\PACK\Keil\STM32L0xx_DFP\1.5.0\Boards\ST\STM32L053-Discovery\Documents\DM00118944.pdf</Path>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\1.5.0\Boards\ST\STM32L053-Discovery\Documents\DM00118944.pdf</Path>
         </Book>
         <Book>
           <Number>1</Number>
           <Title>Data Brief (STM32L053-Discovery)</Title>
-          <Path>C:\Program Files (x86)\Keil\ARM\PACK\Keil\STM32L0xx_DFP\1.5.0\Boards\ST\STM32L053-Discovery\Documents\DM00122138.pdf</Path>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\1.5.0\Boards\ST\STM32L053-Discovery\Documents\DM00122138.pdf</Path>
         </Book>
         <Book>
           <Number>2</Number>
           <Title>Schematics (STM32L053-Discovery)</Title>
-          <Path>C:\Program Files (x86)\Keil\ARM\PACK\Keil\STM32L0xx_DFP\1.5.0\Boards\ST\STM32L053-Discovery\Documents\MB1143.pdf</Path>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\1.5.0\Boards\ST\STM32L053-Discovery\Documents\MB1143.pdf</Path>
         </Book>
         <Book>
           <Number>3</Number>
@@ -167,7 +167,40 @@
           <Name>-U0671FF525056805087054431 -O10479 -S0 -C0 -A0 -N00("ARM CoreSight SW-DP") -D00(0BC11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8004 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO7 -FD20000000 -FC800 -FN1 -FF0STM32L0xx_64.FLM -FS08000000 -FL010000 -FP0($$Device:STM32L051C6$Flash\STM32L0xx_64.FLM)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint/>
+      <Breakpoint>
+        <Bp>
+          <Number>0</Number>
+          <Type>0</Type>
+          <LineNumber>212</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134226276</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>../Src/main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\SiCMiC\../Src/main.c\212</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>245</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>../Src/main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+      </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
@@ -183,6 +216,16 @@
           <count>2</count>
           <WinNumber>1</WinNumber>
           <ItemText>experiments[8]</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>message[1]</ItemText>
+        </Ww>
+        <Ww>
+          <count>4</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>HAL_I2C_Slave_Transmit</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>
@@ -222,7 +265,7 @@
       <bLin2Auto>0</bLin2Auto>
       <SystemViewers>
         <Entry>
-          <Name>System Viewer\ADC</Name>
+          <Name>System Viewer\I2C1</Name>
           <WinId>35905</WinId>
         </Entry>
       </SystemViewers>
@@ -231,7 +274,7 @@
 
   <Group>
     <GroupName>Application/User</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

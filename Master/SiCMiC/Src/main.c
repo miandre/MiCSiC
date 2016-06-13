@@ -1,7 +1,48 @@
 /**
   ******************************************************************************
   * File Name          : main.c
+	
+	Main program for SiC in Space experiment. 
+	
+	
+	Note that in the current configuration, the software communicates via
+	USART, and not via I2C (As the final software will have to do). 
+	Some I2C functionality is written, but at the moment this will most 
+	likely not work without further configuration. 
+	
+	To use the software as is, download the processing software from github 
+	(https://github.com/Happsson/SiC-Analyzing), 
+	connect the USART to the computer using for example this cable:
+	(http://www.lawicel-shop.se/prod/TTL-232R-USB-5Vcable-33V-IO_794885/Sparkfun_64668/SWE/SEK) 
+	and run the Processing code. 
+	On the current most recent board, the TX and RX pinouts are located next to the SWD port like so:
 
+	[TX]
+	[RX]
+	[NC]
+	[GND]
+	
+	where TX is closest to the SWD port, and GND is closest to the reset button. 
+	
+	The I2C connections are located on the pin header with three pins like this:
+	[SCL]
+	[SDA]
+	[GND]
+	where GND is closest to the 3.3 power supply.
+	
+	The pin header for the SWD is configured in the following way:
+	
+	[NC] 
+	[SWCLK]
+	[GND]
+	[SWDIO]
+	[NRST]
+	[NC]
+	Where NRST and NC are closest to the USART port. 
+	
+	Refer to the Diptrace files for schematics and PCB design for 
+	further pin connections. 
+	
   ******************************************************************************
   *
   * COPYRIGHT(c) 2016 STMicroelectronics
@@ -57,11 +98,8 @@ struct experiment_package {
 };
 
 /* Private variables ---------------------------------------------------------*/
-
-
-uint32_t                      			 aResultDMA;
 uint16_t 														 number_of_tests = 16;
-uint32_t 													  timerDelay = 1;
+uint32_t 													   timerDelay = 1;
 	
 
 /* External variables*/
@@ -100,13 +138,12 @@ void graphTestSweep(int);
 void testProgram(void);
 void SystemPower_Config(void);
 uint8_t* create_graph_package(uint8_t[]);
-uint16_t receive_OBC_message();
+uint16_t receive_OBC_message(void);
 
 uint32_t tickCounterStart;
 uint32_t tickCounterStop;
 uint32_t value;
 uint32_t timeTaken;
-uint16_t graph_sweep[192]; //Varannan Vrc, varannan Vrb
 
 
 int main(void)
@@ -199,14 +236,15 @@ void normalRun(){
 	/* Send message */
 	send_message(message_pointer);
 	
+	
 	/*
 	This is used for testing purposes. Connect USART to computer,
 	run the test program written in Processing. 
-	
+	*/
 	//Send UART Message
 	HAL_UART_Transmit(&huart1,(uint8_t*)&message, 34, 10);
 	huart1.State=HAL_UART_STATE_READY;
-	*/
+	
 	
 	SystemPower_Config();
 			
@@ -296,8 +334,10 @@ void send_message(uint8_t * message){
 	/*************************DISCLAIMER****************
 	This code for the I2C communication is not valid for communication and only
 	used for test purposes.
-	This code should be rewritten before use
+	This code should be rewritten before use.
 	********************************************************/
+	
+	/*
 	
 	while(HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY)
    {
@@ -308,6 +348,8 @@ void send_message(uint8_t * message){
 	{
 	 
 	}
+	
+	*/
 	
 }
 
@@ -355,8 +397,8 @@ uint8_t* create_i2c_package(uint8_t message[]){
 		checksum += *ptr;
 		ptr++;
 	}
-	//message[33] = '\n'; //Only used when sending to Processing.
-	message[33] = checksum;
+	message[33] = '\n'; //Only used when sending to Processing.
+	//message[33] = checksum; //Uncomment this when communicating via I2C.
 	
 	return (uint8_t *) message;
 }
